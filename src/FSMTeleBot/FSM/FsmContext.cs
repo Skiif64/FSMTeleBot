@@ -4,24 +4,30 @@ namespace FSMTeleBot.FSM;
 
 public class FsmContext
 {
+    private readonly long _chatId;
     private readonly IStateStorage _stateStorage;
-    private StateGroupBase _currentState;
+    private StateGroupBase _currentStateGroup;
     public StateBase CurrentState { get; private set; } = null!;
 
-    public FsmContext(IStateStorage stateStorage, StateGroupBase currentState)
+    public FsmContext(long chatId, IStateStorage stateStorage)
     {
+        _chatId = chatId;
         _stateStorage = stateStorage;
-        _currentState = currentState;
+        _currentStateGroup = _stateStorage.GetOrCreateAsync(_chatId).Result;
+        CurrentState = _currentStateGroup.CurrentState;
     }
 
-    public void SetState(StateGroupBase group)
+    public async Task SetState(StateGroupBase group)
     {
-
+        //TODO: Validate
+        await _stateStorage.UpdateAsync(_chatId, group);
+        _currentStateGroup = group;
     }
 
-    public void Next()
+    public async Task Next()
     {
-
+        CurrentState = _currentStateGroup.Next();
+        await _stateStorage.UpdateAsync(_chatId, _currentStateGroup);
     }
 
     public void Previous()

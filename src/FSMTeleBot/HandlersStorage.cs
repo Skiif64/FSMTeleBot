@@ -9,20 +9,23 @@ namespace FSMTeleBot;
 
 public class HandlersStorage : IHandlersStorage
 {
-    private readonly ConcurrentDictionary<Type, List<object>> _registered = new();
+    private readonly ConcurrentDictionary<Type, List<HandlerSource>> _registered = new();
     public void Register(Assembly assembly)
     {
         var handlers = GetAllImplementationOfGenericInterface(typeof(IHandler<>), assembly);
         foreach (var handler in handlers)
         {
             var key = GetGenericFromImplementedInterface(handler, typeof(IHandler<>));
-            var value = _registered.GetOrAdd(key, new List<object>());
-            value.Add(Activator.CreateInstance(handler));
+            if (key is null)
+                throw new Exception();//TODO: normal exception
+            var value = _registered.GetOrAdd(key, new List<HandlerSource>());
+            value.Add(new HandlerSource(handler));
         }
     }
     public IHandler<T>? GetHandler<T>(T argument) where T: Message
     {
-        var handler = _registered[argument.GetType()].FirstOrDefault(h => IsMatchToAttribute(h.GetType(), argument));
+        var source = _registered[argument.GetType()].FirstOrDefault(h => IsMatchToAttribute(h.HandlerType, argument));
+        var handler = source?.Source.Invoke(new object[0]);
         return (IHandler<T>?)handler;
     }
 

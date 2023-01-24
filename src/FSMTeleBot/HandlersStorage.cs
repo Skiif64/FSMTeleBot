@@ -17,12 +17,12 @@ public class HandlersStorage : IHandlersStorage
         {
             var key = GetGenericFromImplementedInterface(handler, typeof(IHandler<>));
             if (key is null)
-                throw new Exception();//TODO: normal exception
+                continue;
             var value = _registered.GetOrAdd(key, new List<HandlerSource>());
             value.Add(new HandlerSource(handler));
         }
     }
-    public IHandler<T>? GetHandler<T>(T argument) where T: Message
+    public IHandler<T>? GetHandlerByUpdateType<T>(T argument) where T: Message
     {
         var source = _registered[argument.GetType()].FirstOrDefault(h => IsMatchToAttribute(h.HandlerType, argument));
         var handler = source?.Source.Invoke(new object[0]);

@@ -18,7 +18,7 @@ public class FilteringHandlersTests : HandlersStorageBase
         };
         
 
-        var handler = UnderTest.GetHandler(message);
+        var handler = UnderTest.GetHandlerByUpdateType(message);
 
         Assert.NotNull(handler);
         Assert.That(handler.GetType().GetCustomAttribute<FilterAttribute>(), Is.Not.Null );
@@ -34,7 +34,7 @@ public class FilteringHandlersTests : HandlersStorageBase
             Text = "/"+command
         };        
 
-        var handler = UnderTest.GetHandler(message);
+        var handler = UnderTest.GetHandlerByUpdateType(message);
 
         Assert.NotNull(handler);
         Assert.That(handler.GetType().GetCustomAttribute<FilterAttribute>(), Is.Not.Null);

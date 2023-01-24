@@ -16,7 +16,7 @@ public class HandlersStorageTests : HandlersStorageBase
             Text = "/start"
         };        
 
-        var handler = UnderTest.GetHandler(message);
+        var handler = UnderTest.GetHandlerByUpdateType(message);
 
         Assert.NotNull(handler);
         Assert.That(handler, Is.TypeOf(typeof(StartCommandMessageHandler)));
@@ -30,7 +30,7 @@ public class HandlersStorageTests : HandlersStorageBase
             Text = "/cancel"
         };        
 
-        var handler = UnderTest.GetHandler(message);
+        var handler = UnderTest.GetHandlerByUpdateType(message);
 
         Assert.NotNull(handler);
         Assert.That(handler, Is.TypeOf(typeof(CancelCommandMessageHandler)));

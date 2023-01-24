@@ -15,7 +15,7 @@ public class MessageRouteHandler : IRouteHandler<Message>
 
     public async Task RouteAsync(Message message, CancellationToken cancellationToken = default)
     {
-        var handler = (IHandler<Message>)_handlersStorage.GetHandler<Message>(message);
+        var handler = (IHandler<Message>)_handlersStorage.GetHandlerByUpdateType<Message>(message);
         await handler.HandleAsync(message, cancellationToken);
     }
 }

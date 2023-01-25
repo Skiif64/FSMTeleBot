@@ -31,14 +31,14 @@ namespace FSMTeleBot.Tests
                .Returns(Task.CompletedTask);
                 
            var mock = new Mock<IHandlersStorage>();
-            mock.Setup(x => x.GetHandler<Message>(It.IsAny<Message>()))
+            mock.Setup(x => x.GetHandlerByUpdateType<Message>(It.IsAny<Message>()))
                 .Returns(handlerMock.Object);
                 
             var messageRouteHandler = new MessageRouteHandler(mock.Object);
 
             await messageRouteHandler.RouteAsync(message);
 
-            mock.Verify(x => x.GetHandler<Message>(It.IsAny<Message>()), Times.Once());
+            mock.Verify(x => x.GetHandlerByUpdateType<Message>(It.IsAny<Message>()), Times.Once());
             handlerMock.Verify(x => x.HandleAsync(It.Is<Message>(x => x == message), default), Times.Once);
         }
 
@@ -55,14 +55,14 @@ namespace FSMTeleBot.Tests
             };
             
             var mock = new Mock<IHandlersStorage>();
-            mock.Setup(x => x.GetHandler(It.Is<Message>(x => x.Text == "/start")))
+            mock.Setup(x => x.GetHandlerByUpdateType(It.Is<Message>(x => x.Text == "/start")))
                 .Returns(new StartMessageHandler());
 
             var messageRouteHandler = new MessageRouteHandler(mock.Object);
 
             await messageRouteHandler.RouteAsync(message);
 
-            mock.Verify(x => x.GetHandler<Message>(It.IsAny<Message>()), Times.Once());            
+            mock.Verify(x => x.GetHandlerByUpdateType<Message>(It.IsAny<Message>()), Times.Once());            
         }
     }
 }

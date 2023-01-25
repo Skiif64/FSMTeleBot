@@ -4,8 +4,8 @@ using Telegram.Bot.Types;
 
 namespace FSMTeleBot.Tests.Fakes;
 
-[Filter(Contains = "cancel")]
-public class CancelMessageHandler : IHandler<Message>
+[Filter(Regexp = @"^http[s]?://\w")]
+public class UrlMessageHandler : IHandler<Message>
 {
     public Task HandleAsync(Message data, CancellationToken cancellationToken = default)
     {

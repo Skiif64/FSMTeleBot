@@ -1,9 +1,11 @@
 ﻿using FSMTeleBot.Handlers.Abstractions;
+using System.Reflection;
 using Telegram.Bot.Types;
 
 namespace FSMTeleBot;
 
 public interface IHandlersStorage
 {
-    IHandler<T>? GetHandler<T>(T argument) where T : Message;
+    void Register(Assembly assembly);
+    IHandler<T>? GetHandlerByUpdateType<T>(T argument) where T : Message;
 }

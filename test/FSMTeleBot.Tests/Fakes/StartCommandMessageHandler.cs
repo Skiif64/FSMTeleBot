@@ -2,10 +2,10 @@
 using FSMTeleBot.Handlers.Abstractions;
 using Telegram.Bot.Types;
 
-namespace FSMTeleBot.Tests.Fakes;
+namespace FSMTeleBot.Tests.TestHandlers;
 
-[Filter(Contains = "cancel")]
-public class CancelMessageHandler : IHandler<Message>
+[Filter(ContainsCommand = "start")]
+public class StartCommandMessageHandler : IHandler<Message>
 {
     public Task HandleAsync(Message data, CancellationToken cancellationToken = default)
     {

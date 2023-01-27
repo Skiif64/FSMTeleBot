@@ -4,7 +4,7 @@ using Telegram.Bot.Types;
 
 namespace FSMTeleBot.Tests.TestHandlers;
 
-[Filter(Contains = "start")]
+[MessageFilter(Contains = "start")]
 public class StartMessageHandler : IHandler<Message>
 {
     public Task HandleAsync(Message data, CancellationToken cancellationToken = default)

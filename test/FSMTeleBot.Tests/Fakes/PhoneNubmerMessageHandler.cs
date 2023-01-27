@@ -4,7 +4,7 @@ using Telegram.Bot.Types;
 
 namespace FSMTeleBot.Tests.Fakes;
 
-[Filter(Regexp = @"[+]\d{11}")]
+[MessageFilter(Regexp = @"[+]\d{11}")]
 public class PhoneNubmerMessageHandler : IHandler<Message>
 {
     public Task HandleAsync(Message data, CancellationToken cancellationToken = default)

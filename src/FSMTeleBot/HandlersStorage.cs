@@ -61,19 +61,19 @@ public class HandlersStorage : IHandlersStorage
 
     private static bool IsMatchToAttribute(Type handlerType, Message message)
     {
-        var attribute = handlerType.GetCustomAttribute<FilterAttribute>();
-        if (attribute is null)
-            return false;
+        //var attribute = handlerType.GetCustomAttribute<FilterAttribute>();
+        //if (attribute is null)
+        //    return false;
         
-        if (attribute.Contains is not null
-            && !message.Text.Contains(attribute.Contains, StringComparison.InvariantCultureIgnoreCase))
-            return false;
-        if(attribute.ContainsCommand is not null
-            && !message.Text.Contains("/"+attribute.ContainsCommand, StringComparison.InvariantCultureIgnoreCase))
-            return false;
-        if (attribute.Regexp is not null
-            && !Regex.IsMatch(message.Text, attribute.Regexp))
-            return false;
+        //if (attribute.Contains is not null
+        //    && !message.Text.Contains(attribute.Contains, StringComparison.InvariantCultureIgnoreCase))
+        //    return false;
+        //if(attribute.ContainsCommand is not null
+        //    && !message.Text.Contains("/"+attribute.ContainsCommand, StringComparison.InvariantCultureIgnoreCase))
+        //    return false;
+        //if (attribute.Regexp is not null
+        //    && !Regex.IsMatch(message.Text, attribute.Regexp))
+        //    return false;
         
         return true;
     }

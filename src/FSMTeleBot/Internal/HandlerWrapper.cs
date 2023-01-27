@@ -32,7 +32,7 @@ internal class HandlerWrapper<TMessage> : HandlerWrapper
     
     public Task Handle(TMessage message, IServiceProvider provider, CancellationToken cancellationToken = default)
     {
-        var handler = (IHandler<TMessage>)provider.GetRequiredService(_handlerType);
+        var handler = (IHandler<TMessage>)Activator.CreateInstance(_handlerType); //TODO: Remove this boilerplate
         return handler.HandleAsync(message, cancellationToken);
     }
     

@@ -12,14 +12,9 @@ public class BotMediator : IBotMediator
     public BotMediator(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
-    }
-    public Task Send(object argument, CancellationToken cancellationToken = default)
-    {
-        //TODO: Get generic from implemented interface
-        return Send((Message)argument, cancellationToken);
-    }
+    }    
 
-    public async Task Send<T>(T argument, CancellationToken cancellationToken = default) where T: Message
+    public async Task Send<T>(T argument, CancellationToken cancellationToken = default)
     {
         var wrappers = _handlers.GetOrAdd(typeof(T),
             t =>

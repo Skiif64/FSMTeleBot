@@ -5,5 +5,5 @@ namespace FSMTeleBot.Internal.Mediator;
 
 internal interface IBotMediator
 {
-    Task Send(object argument, CancellationToken cancellationToken = default);
+    Task Send<T>(T argument, CancellationToken cancellationToken = default);
 }

@@ -1,6 +1,5 @@
 ﻿using FSMTeleBot.Filters;
 using FSMTeleBot.Handlers.Abstractions;
-using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 namespace FSMTeleBot.Internal;
@@ -46,7 +45,8 @@ internal class HandlerWrapper<TMessage> : HandlerWrapper
 
     public bool CanHandle(TMessage message)
     {
-        //TODO: Validation
-        return true;
+        if (_filter is null)
+            return true;
+        return _filter.IsMatch(message);
     }
 }

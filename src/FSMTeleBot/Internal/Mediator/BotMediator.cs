@@ -25,7 +25,7 @@ public class BotMediator : IBotMediator
                     return list;
                 foreach (var service in services)
                 {
-                    list.Add(new HandlerWrapper<T>(service.GetType()));
+                    list.Add(new HandlerWrapper<T>((IHandler<T>)service));
                 }
                 return list;
             });

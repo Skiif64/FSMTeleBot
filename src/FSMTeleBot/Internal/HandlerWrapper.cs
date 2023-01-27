@@ -13,12 +13,14 @@ internal abstract class HandlerWrapper
 internal class HandlerWrapper<TMessage> : HandlerWrapper
 {
     private readonly Type _handlerType;
+    private readonly IHandler<TMessage> _handler;
     private readonly FilterAttribute? _filter;
 
-    public HandlerWrapper(Type handlerType)
+    public HandlerWrapper(IHandler<TMessage> handler)
     {
         //TODO: Validation
-        _handlerType = handlerType;
+        _handler = handler;
+        _handlerType = handler.GetType();
         _filter = _handlerType.GetCustomAttribute<FilterAttribute>();            
     }
 
@@ -31,9 +33,8 @@ internal class HandlerWrapper<TMessage> : HandlerWrapper
     }
     
     public Task Handle(TMessage message, IServiceProvider provider, CancellationToken cancellationToken = default)
-    {
-        var handler = (IHandler<TMessage>)Activator.CreateInstance(_handlerType); //TODO: Remove this boilerplate
-        return handler.HandleAsync(message, cancellationToken);
+    {        
+        return _handler.HandleAsync(message, cancellationToken);
     }
     
     public override bool CanHandle(object argument)

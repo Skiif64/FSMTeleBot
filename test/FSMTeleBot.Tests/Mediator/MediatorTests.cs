@@ -50,7 +50,7 @@ public class MediatorTests
     }
 
     [Test]
-    public void WhenCorrectMessage_ThenHandleCorrectHandler()
+    public void When_SendStartMessage_Then_HandleCorrectHandler()
     {
         var message = new Message
         {
@@ -63,7 +63,7 @@ public class MediatorTests
     }
 
     [Test]
-    public void WhenInCorrectMessage_ThenDoNothing()
+    public void When_SendNoneMessage_Then_DoNothing()
     {
         var message = new Message
         {

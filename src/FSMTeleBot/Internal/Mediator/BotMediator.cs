@@ -1,7 +1,5 @@
 ﻿using FSMTeleBot.Handlers.Abstractions;
-using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Concurrent;
-using Telegram.Bot.Types;
 
 namespace FSMTeleBot.Internal.Mediator;
 
@@ -12,20 +10,23 @@ public class BotMediator : IBotMediator
     public BotMediator(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
-    }    
-
+    }
+   
     public async Task Send<T>(T argument, CancellationToken cancellationToken = default)
     {
+        if (argument is null)
+            throw new NullReferenceException(nameof(argument));
+
         var wrappers = _handlers.GetOrAdd(typeof(T),
             t =>
             {
-                var services = _serviceProvider.GetServices(typeof(IHandler<T>));                
+                var services = (IEnumerable<IHandler<T>>)_serviceProvider.GetService(typeof(IEnumerable<IHandler<T>>))!;                           
                 var list = new List<HandlerWrapper>();
                 if (!services.Any())
                     return list;
                 foreach (var service in services)
                 {
-                    list.Add(new HandlerWrapper<T>((IHandler<T>)service));
+                    list.Add(new HandlerWrapper<T>(service));
                 }
                 return list;
             });

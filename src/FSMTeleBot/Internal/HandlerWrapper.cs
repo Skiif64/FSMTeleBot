@@ -1,5 +1,6 @@
 ﻿using FSMTeleBot.Filters;
 using FSMTeleBot.Handlers.Abstractions;
+using System.ComponentModel;
 using System.Reflection;
 
 namespace FSMTeleBot.Internal;
@@ -20,7 +21,10 @@ internal class HandlerWrapper<TMessage> : HandlerWrapper
         //TODO: Validation
         _handler = handler;
         _handlerType = handler.GetType();
-        _filter = _handlerType.GetCustomAttribute<FilterAttribute>();            
+        _filter = TypeDescriptor
+            .GetAttributes(_handler)
+            .OfType<FilterAttribute>()
+            .First();
     }
 
     public override Task Handle(object argument, IServiceProvider provider, CancellationToken cancellationToken = default)

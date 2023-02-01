@@ -30,7 +30,7 @@ public class MessageFilterAttribute : FilterAttribute
         if (Allowed is not null)
         {
             var memberService = (IChatMemberManager)provider.GetService(typeof(IChatMemberManager))!;
-            if (memberService.GetChatMemberStatus(message.Chat.Id, message.From.Id).Result > Allowed) //TODO: refactor this
+            if (memberService.GetStatus(message.Chat.Id, message.From.Id).Result > Allowed) //TODO: refactor this
                 return false;
         }
 

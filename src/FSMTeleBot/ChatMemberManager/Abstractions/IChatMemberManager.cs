@@ -4,5 +4,5 @@ namespace FSMTeleBot.ChatMemberManager.Abstractions;
 
 public interface IChatMemberManager
 {
-    Task<ChatMemberStatus> GetChatMemberStatus(long chatId, long userId, CancellationToken cancellationToken = default);
+    Task<ChatMemberStatus> GetStatus(long chatId, long userId, CancellationToken cancellationToken = default);
 }

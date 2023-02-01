@@ -25,7 +25,7 @@ public abstract class StateGroup : IStateGroup
            .ToImmutableArray();
     }
 
-    public async Task<IState> Next(FsmContext context, CancellationToken cancellationToken = default)
+    public async Task<IState> Next(IFsmContext context, CancellationToken cancellationToken = default)
     {
         if (_currentStateIndex >= States.Length)
             throw new InvalidOperationException("Out of range");//TODO: Finish state?

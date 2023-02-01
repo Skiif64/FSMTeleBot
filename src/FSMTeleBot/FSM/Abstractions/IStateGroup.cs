@@ -7,5 +7,5 @@ public interface IStateGroup
     ImmutableArray<IState> States { get; }
     IState this[int index] { get; }
 
-    Task<IState> Next(FsmContext context, CancellationToken cancellationToken = default);
+    Task<IState> Next(IFsmContext context, CancellationToken cancellationToken = default);
 }

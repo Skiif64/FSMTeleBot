@@ -1,34 +1,35 @@
-﻿using System.Reflection;
+﻿using System.Collections.Immutable;
+using System.Reflection;
 
 namespace FSMTeleBot.FSM;
 
 public abstract class StateGroup : IStateGroup
 {
     private int _currentStateIndex = 0;
-    private readonly IList<IState> _states;
-    public IState this[int index] => _states[index];
+    public ImmutableArray<IState> States { get; private set; }
+    public IState this[int index] => States[index];
 
-    public StateGroup(StateGroup child)
+    public StateGroup()
     {
-        _states = child
-            .GetType()
-            .GetProperties(BindingFlags.Public | BindingFlags.Static)
-            .Where(p => p.PropertyType.IsAssignableTo(typeof(IState)))
-            .Select(p => new ChatState(p.Name))
-            .OfType<IState>()
-            .ToList();  
+       
     }
 
-    internal StateGroup()
+    protected void InitState(StateGroup child)
     {
-
+        States = child
+           .GetType()
+           .GetProperties(BindingFlags.Public | BindingFlags.Static)
+           .Where(p => p.PropertyType.IsAssignableTo(typeof(IState)))
+           .Select(p => new ChatState(p.Name))
+           .OfType<IState>()
+           .ToImmutableArray();
     }
 
     public async Task<IState> Next(FsmContext context, CancellationToken cancellationToken = default)
     {
-        if (_currentStateIndex >= _states.Count)
+        if (_currentStateIndex >= States.Length)
             throw new InvalidOperationException("Out of range");//TODO: Finish state?
-        await context.SetStateAsync(_states[++_currentStateIndex], cancellationToken);
-        return _states[_currentStateIndex];
+        await context.SetStateAsync(States[++_currentStateIndex], cancellationToken);
+        return States[_currentStateIndex];
     }
 }

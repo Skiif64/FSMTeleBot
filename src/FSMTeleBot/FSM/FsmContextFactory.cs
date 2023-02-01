@@ -1,10 +1,10 @@
 ﻿namespace FSMTeleBot.FSM;
 
-public class BotFSM : IBotFSM
+public class FsmContextFactory : IFsmContextFactory
 {
     private readonly IStateStorage _storage;
 
-    public BotFSM(IStateStorage storage)
+    public FsmContextFactory(IStateStorage storage)
     {
         _storage = storage;
     }

@@ -1,6 +1,6 @@
 ﻿namespace FSMTeleBot.FSM;
 
-public interface IBotFSM
+public interface IFsmContextFactory
 {
     Task<FsmContext> GetContextAsync(long chatId, long userId, CancellationToken cancellationToken = default);
 }

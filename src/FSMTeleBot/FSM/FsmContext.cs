@@ -5,7 +5,7 @@ public class FsmContext
     private readonly IStateStorage _storage;
     private readonly long _chatId;
     private readonly long _userId; 
-    private IStateGroup? _stateGroup; //TODO: Lazy load?
+    private IStateGroup? _stateGroup; //TODO: Lazy load?    
     public IState? CurrentState { get; private set; }
 
     internal FsmContext(long chatId, long userId, IStateStorage storage)
@@ -17,7 +17,7 @@ public class FsmContext
     
     public async Task SetStateGroupAsync(IStateGroup stateGroup, CancellationToken cancellationToken = default)
     {
-        _stateGroup = stateGroup;
+        _stateGroup = stateGroup;        
         CurrentState = stateGroup[0];
         await _storage
             .UpdateAsync(_chatId, _userId, CurrentState, cancellationToken)

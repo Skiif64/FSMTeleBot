@@ -1,14 +1,14 @@
-﻿using FSMTeleBot.ChatMemberManager.Abstractions;
+﻿using FSMTeleBot.Abstractions;
 using Telegram.Bot;
 using Telegram.Bot.Types.Enums;
 
-namespace FSMTeleBot.ChatMemberManager;
+namespace FSMTeleBot.Services;
 
-public class ChatMemberManager : IChatMemberManager
+public class ChatMemberService : IChatMemberService
 {
     private readonly ITelegramBotClient _client;
-    
-    public ChatMemberManager(ITelegramBotClient client)
+
+    public ChatMemberService(ITelegramBotClient client)
     {
         _client = client;
     }

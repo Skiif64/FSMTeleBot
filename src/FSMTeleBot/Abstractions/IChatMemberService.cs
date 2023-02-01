@@ -1,8 +1,8 @@
 ﻿using Telegram.Bot.Types.Enums;
 
-namespace FSMTeleBot.ChatMemberManager.Abstractions;
+namespace FSMTeleBot.Abstractions;
 
-public interface IChatMemberManager
+public interface IChatMemberService
 {
     Task<ChatMemberStatus> GetStatus(long chatId, long userId, CancellationToken cancellationToken = default);
 }

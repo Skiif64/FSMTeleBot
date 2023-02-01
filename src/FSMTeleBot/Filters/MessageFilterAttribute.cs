@@ -1,4 +1,4 @@
-﻿using FSMTeleBot.ChatMemberManager.Abstractions;
+﻿using FSMTeleBot.Abstractions;
 using System.Text.RegularExpressions;
 using Telegram.Bot.Types;
 
@@ -29,7 +29,7 @@ public class MessageFilterAttribute : FilterAttribute
             return false;
         if (Allowed is not null)
         {
-            var memberService = (IChatMemberManager)provider.GetService(typeof(IChatMemberManager))!;
+            var memberService = (IChatMemberService)provider.GetService(typeof(IChatMemberService))!;
             if (memberService.GetStatus(message.Chat.Id, message.From.Id).Result > Allowed) //TODO: refactor this
                 return false;
         }

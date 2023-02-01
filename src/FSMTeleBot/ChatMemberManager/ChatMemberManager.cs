@@ -7,7 +7,7 @@ namespace FSMTeleBot.ChatMemberManager;
 public class ChatMemberManager : IChatMemberManager
 {
     private readonly ITelegramBotClient _client;
-
+    
     public ChatMemberManager(ITelegramBotClient client)
     {
         _client = client;

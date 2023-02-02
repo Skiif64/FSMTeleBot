@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using FSMTeleBot.Internal;
+using System.Collections.Immutable;
 using System.Reflection;
 
 namespace FSMTeleBot.FSM;
@@ -11,17 +12,19 @@ public abstract class StateGroup : IStateGroup
 
     public StateGroup()
     {
-       
+
     }
 
     protected void InitState(StateGroup child)
     {
-        States = child
+        var properties = child
            .GetType()
            .GetProperties(BindingFlags.Public | BindingFlags.Static)
            .Where(p => p.PropertyType.IsAssignableTo(typeof(IState)))
-           .Select(p => new ChatState(p.Name))
-           .OfType<IState>()
+           .ForEach(p => p.SetValue(child, new ChatState(p.Name)));
+        States = properties
+            .Select(p => p.GetValue(child))
+            .OfType<IState>()
            .ToImmutableArray();
     }
 

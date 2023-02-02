@@ -47,5 +47,6 @@ public class StateGroupTests
         var result = await _stateGroup.Next(contextMock.Object, default);
         Assert.IsNotNull(result);
         Assert.That(result == _stateGroup[1]);
+        contextMock.Verify(x => x.SetStateAsync(It.IsAny<IState>(), default), Times.Once);
     }
 }

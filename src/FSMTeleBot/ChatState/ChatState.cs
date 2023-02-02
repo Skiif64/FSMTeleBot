@@ -1,6 +1,8 @@
-﻿namespace FSMTeleBot.FSM;
+﻿using FSMTeleBot.ChatState.Abstractions;
 
-public class ChatState : IState
+namespace FSMTeleBot.ChatState;
+
+public class ChatState : IChatState
 {
     public string Name { get; }
     public ChatState(string name)
@@ -10,7 +12,7 @@ public class ChatState : IState
 
     public override bool Equals(object? obj)
     {
-        if(obj is not ChatState other)
+        if (obj is not ChatState other)
             return false;
 
         return Name.Equals(other.Name);

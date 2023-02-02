@@ -1,34 +1,35 @@
-﻿using FSMTeleBot.Internal;
+﻿using FSMTeleBot.ChatState.Abstractions;
+using FSMTeleBot.Internal;
 using System.Collections.Immutable;
 using System.Reflection;
 
-namespace FSMTeleBot.FSM;
+namespace FSMTeleBot.ChatState;
 
-public abstract class StateGroup : IStateGroup
+public abstract class ChatStateGroup : IChatStateGroup
 {
     private int _currentStateIndex = 0;
-    public ImmutableArray<IState> States { get; private set; }
-    public IState this[int index] => States[index];
+    public ImmutableArray<IChatState> States { get; private set; }
+    public IChatState this[int index] => States[index];
 
-    public StateGroup()
+    public ChatStateGroup()
     {
 
     }
 
-    protected void InitState(StateGroup child)
+    protected void InitState(ChatStateGroup child)
     {
         var properties = child
            .GetType()
            .GetProperties(BindingFlags.Public | BindingFlags.Static)
-           .Where(p => p.PropertyType.IsAssignableTo(typeof(IState)))
+           .Where(p => p.PropertyType.IsAssignableTo(typeof(IChatState)))
            .ForEach(p => p.SetValue(child, new ChatState(p.Name)));
         States = properties
             .Select(p => p.GetValue(child))
-            .OfType<IState>()
+            .OfType<IChatState>()
            .ToImmutableArray();
     }
 
-    public async Task<IState> Next(IFsmContext context, CancellationToken cancellationToken = default)
+    public async Task<IChatState> Next(IChatContext context, CancellationToken cancellationToken = default)
     {
         if (_currentStateIndex >= States.Length)
             throw new InvalidOperationException("Out of range");//TODO: Finish state?

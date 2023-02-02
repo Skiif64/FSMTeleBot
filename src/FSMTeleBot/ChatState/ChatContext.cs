@@ -1,21 +1,23 @@
-﻿namespace FSMTeleBot.FSM;
+﻿using FSMTeleBot.ChatState.Abstractions;
 
-public class FsmContext : IFsmContext
+namespace FSMTeleBot.ChatState;
+
+public class ChatContext : IChatContext
 {
-    private readonly IStateStorage _storage;
+    private readonly IChatStateStorage _storage;
     private readonly long _chatId;
     private readonly long _userId;
-    private IStateGroup? _stateGroup; //TODO: Lazy load?    
-    public IState? CurrentState { get; private set; }
+    private IChatStateGroup? _stateGroup; //TODO: Lazy load?    
+    public IChatState? CurrentState { get; private set; }
 
-    internal FsmContext(long chatId, long userId, IStateStorage storage)
+    internal ChatContext(long chatId, long userId, IChatStateStorage storage)
     {
         _chatId = chatId;
         _userId = userId;
         _storage = storage;
     }
 
-    public async Task SetStateGroupAsync(IStateGroup stateGroup, CancellationToken cancellationToken = default)
+    public async Task SetStateGroupAsync(IChatStateGroup stateGroup, CancellationToken cancellationToken = default)
     {
         _stateGroup = stateGroup;
         CurrentState = stateGroup[0];
@@ -24,7 +26,7 @@ public class FsmContext : IFsmContext
             .ConfigureAwait(false);
     }
 
-    public async Task SetStateAsync(IState state, CancellationToken cancellationToken = default)
+    public async Task SetStateAsync(IChatState state, CancellationToken cancellationToken = default)
     {
         CurrentState = state;
         await _storage

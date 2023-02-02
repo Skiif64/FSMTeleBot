@@ -7,9 +7,9 @@ public class StateGroupTests
 {    
     class TestStateGroup : StateGroup
     {
-        public static IState State1 { get; }
-        public static IState State2 { get; }
-        public static IState State3 { get; }
+        public static IState State1 { get; set; }
+        public static IState State2 { get; set; }
+        public static IState State3 { get; set; }
         public TestStateGroup()
         {
             InitState(this);
@@ -28,6 +28,14 @@ public class StateGroupTests
         Assert.IsNotNull(_stateGroup.States);
         Assert.That(_stateGroup.States.Count, Is.EqualTo(3));
         CollectionAssert.AllItemsAreInstancesOfType(_stateGroup.States, typeof(IState));        
+    }
+
+    [Test]
+    public void WhenCreated_Then3StateShouldBeInitialized()
+    {
+        Assert.IsNotNull(TestStateGroup.State1);
+        Assert.IsNotNull(TestStateGroup.State2);
+        Assert.IsNotNull(TestStateGroup.State3);
     }
     [Test]
     public async Task WhenNext_Then2StateShouldBe()

@@ -16,11 +16,11 @@ public abstract class StateGroup : IStateGroup
 
     protected void InitState(StateGroup child)
     {
-        var childType = child.GetType();
-        States = childType           
+        States = child
+           .GetType()
            .GetProperties(BindingFlags.Public | BindingFlags.Static)
            .Where(p => p.PropertyType.IsAssignableTo(typeof(IState)))
-           .Select(p => new ChatState(childType.Name +"/"+ p.Name))
+           .Select(p => new ChatState(p.Name))
            .OfType<IState>()
            .ToImmutableArray();
     }

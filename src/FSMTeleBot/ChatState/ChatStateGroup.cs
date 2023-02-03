@@ -18,11 +18,11 @@ public abstract class ChatStateGroup : IChatStateGroup
 
     protected void InitState(ChatStateGroup child)
     {
-        var properties = child
-           .GetType()
+        var childType = child.GetType();
+        var properties = childType           
            .GetProperties(BindingFlags.Public | BindingFlags.Static)
            .Where(p => p.PropertyType.IsAssignableTo(typeof(IChatState)))
-           .ForEach(p => p.SetValue(child, new ChatState(p.Name)));
+           .ForEach(p => p.SetValue(child, new ChatState(childType.Name + "/" + p.Name)));
         States = properties
             .Select(p => p.GetValue(child))
             .OfType<IChatState>()

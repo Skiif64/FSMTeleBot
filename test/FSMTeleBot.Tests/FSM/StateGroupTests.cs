@@ -1,21 +1,22 @@
-﻿using FSMTeleBot.FSM;
+﻿using FSMTeleBot.ChatState;
+using FSMTeleBot.ChatState.Abstractions;
 using Moq;
 
 namespace FSMTeleBot.Tests.FSM;
 
 public class StateGroupTests
 {    
-    class TestStateGroup : StateGroup
+    class TestStateGroup : ChatStateGroup
     {
-        public static IState State1 { get; }
-        public static IState State2 { get; }
-        public static IState State3 { get; }
+        public static IChatState State1 { get; set; }
+        public static IChatState State2 { get; set; }
+        public static IChatState State3 { get; set; }
         public TestStateGroup()
         {
             InitState(this);
         }
     }
-    private readonly IStateGroup _stateGroup;
+    private readonly IChatStateGroup _stateGroup;
 
     public StateGroupTests()
     {       
@@ -27,17 +28,26 @@ public class StateGroupTests
     {
         Assert.IsNotNull(_stateGroup.States);
         Assert.That(_stateGroup.States.Count, Is.EqualTo(3));
-        CollectionAssert.AllItemsAreInstancesOfType(_stateGroup.States, typeof(IState));        
+        CollectionAssert.AllItemsAreInstancesOfType(_stateGroup.States, typeof(IChatState));        
+    }
+
+    [Test]
+    public void WhenCreated_Then3StateShouldBeInitialized()
+    {
+        Assert.IsNotNull(TestStateGroup.State1);
+        Assert.IsNotNull(TestStateGroup.State2);
+        Assert.IsNotNull(TestStateGroup.State3);
     }
     [Test]
     public async Task WhenNext_Then2StateShouldBe()
     {
-        var contextMock = new Mock<IFsmContext>();
-        contextMock.Setup(x => x.SetStateAsync(It.IsAny<IState>(), default))
+        var contextMock = new Mock<IChatContext>();
+        contextMock.Setup(x => x.SetStateAsync(It.IsAny<IChatState>(), default))
             .Returns(Task.CompletedTask);
 
         var result = await _stateGroup.Next(contextMock.Object, default);
         Assert.IsNotNull(result);
         Assert.That(result == _stateGroup[1]);
+        contextMock.Verify(x => x.SetStateAsync(It.IsAny<IChatState>(), default), Times.Once);
     }
 }

@@ -1,26 +1,15 @@
-﻿using FSMTeleBot.ChatState;
-using FSMTeleBot.ChatState.Abstractions;
+﻿using FSMTeleBot.ChatState.Abstractions;
 using Moq;
 
 namespace FSMTeleBot.Tests.FSM;
 
-public class StateGroupTests
+public class TestStateGroupTests
 {    
-    class TestStateGroup : ChatStateGroup
-    {
-        public static IChatState State1 { get; set; }
-        public static IChatState State2 { get; set; }
-        public static IChatState State3 { get; set; }
-        public TestStateGroup()
-        {
-            InitState(this);
-        }
-    }
     private readonly IChatStateGroup _stateGroup;
 
-    public StateGroupTests()
+    public TestStateGroupTests()
     {       
-        _stateGroup = new TestStateGroup();
+        _stateGroup = new FakeStateGroup();
     }
 
     [Test]
@@ -34,9 +23,9 @@ public class StateGroupTests
     [Test]
     public void WhenCreated_Then3StateShouldBeInitialized()
     {
-        Assert.IsNotNull(TestStateGroup.State1);
-        Assert.IsNotNull(TestStateGroup.State2);
-        Assert.IsNotNull(TestStateGroup.State3);
+        Assert.IsNotNull(FakeStateGroup.State1);
+        Assert.IsNotNull(FakeStateGroup.State2);
+        Assert.IsNotNull(FakeStateGroup.State3);
     }
     [Test]
     public async Task WhenNext_Then2StateShouldBe()

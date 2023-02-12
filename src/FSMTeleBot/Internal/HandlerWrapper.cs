@@ -15,8 +15,9 @@ internal class HandlerWrapper<TMessage> : HandlerWrapper
     private readonly Type _handlerType;
     private readonly IHandler<TMessage> _handler;
     private readonly FilterAttribute? _filter;
+    private readonly IServiceProvider _serviceProvider;
 
-    public HandlerWrapper(IHandler<TMessage> handler)
+    public HandlerWrapper(IHandler<TMessage> handler, IServiceProvider serviceProvider)
     {
         //TODO: Validation
         _handler = handler;
@@ -24,7 +25,8 @@ internal class HandlerWrapper<TMessage> : HandlerWrapper
         _filter = TypeDescriptor
             .GetAttributes(_handler)
             .OfType<FilterAttribute>()
-            .First();
+            .SingleOrDefault();
+        _serviceProvider = serviceProvider;
     }
 
     public override Task Handle(object argument, IServiceProvider provider, CancellationToken cancellationToken = default)
@@ -51,6 +53,6 @@ internal class HandlerWrapper<TMessage> : HandlerWrapper
     {
         if (_filter is null)
             return true;
-        return _filter.IsMatch(message);
+        return _filter.IsMatch(message, _serviceProvider);
     }
 }

@@ -10,7 +10,7 @@ public class MessageFilterAttribute : FilterAttribute
     public string? ContainsCommand { get; init; }
     public string? Contains { get; init; }
     public string? Regexp { get; init; }
-    public ChatState.ChatState? RequiredState { get; init; }
+    public IChatState? RequiredState { get; init; }
     public override bool IsMatch(object argument, IServiceProvider provider)
     {
         if (argument is not Message message)

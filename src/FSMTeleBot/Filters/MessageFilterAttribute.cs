@@ -24,7 +24,7 @@ public class MessageFilterAttribute : FilterAttribute
             && !message.Text.Contains(Contains, StringComparison.InvariantCultureIgnoreCase))
             return false;
         if (ContainsCommand is not null
-            && !message.Text.Contains("/" + ContainsCommand, StringComparison.InvariantCultureIgnoreCase))
+            && !message.Text.StartsWith("/" + ContainsCommand, StringComparison.InvariantCultureIgnoreCase))
             return false;
         if (Regexp is not null
             && !Regex.IsMatch(message.Text, Regexp))

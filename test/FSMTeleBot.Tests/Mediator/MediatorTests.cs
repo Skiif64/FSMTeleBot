@@ -13,6 +13,7 @@ public class MediatorTests
     private readonly IBotMediator _mediator;
     private readonly Mock<IHandler<Message>> _startHandlerMock;
     private readonly Mock<IHandler<Message>> _cancelHandlerMock;
+    private readonly Mock<IHandler<Message>> _emptyHandlerMock;
     
     public MediatorTests()
     {
@@ -22,10 +23,13 @@ public class MediatorTests
         _cancelHandlerMock = new Mock<IHandler<Message>>();
         TypeDescriptor.AddAttributes(_cancelHandlerMock.Object, new MessageFilterAttribute { Contains = "cancel" });
 
+        _emptyHandlerMock = new Mock<IHandler<Message>>();
+        TypeDescriptor.AddAttributes(_emptyHandlerMock.Object, new MessageFilterAttribute());
+
         var serviceProviderMock = new Mock<IServiceProvider>();
         serviceProviderMock
             .Setup(x => x.GetService(typeof(IEnumerable<IHandler<Message>>)))
-        .Returns(new[] { _startHandlerMock.Object, _cancelHandlerMock.Object });
+        .Returns(new[] { _startHandlerMock.Object, _cancelHandlerMock.Object, _emptyHandlerMock.Object });
 
         _serviceProvider = serviceProviderMock.Object;
         _mediator = new BotMediator(_serviceProvider);
@@ -42,10 +46,14 @@ public class MediatorTests
         _cancelHandlerMock
             .Setup(x => x.HandleAsync(It.IsAny<Message>(), default))
             .Returns(Task.CompletedTask);
+        _emptyHandlerMock.Reset();
+        _emptyHandlerMock
+           .Setup(x => x.HandleAsync(It.IsAny<Message>(), default))
+           .Returns(Task.CompletedTask);
     }    
 
     [Test]
-    public void When_SendStartMessage_Then_HandleCorrectHandler()
+    public void WhenSend_StartMessage_ThenHandleStartHandler()
     {
         var message = new Message
         {
@@ -63,10 +71,32 @@ public class MediatorTests
         Assert.DoesNotThrowAsync(async () => await _mediator.Send(message));
         _startHandlerMock.Verify(x => x.HandleAsync(It.IsAny<Message>(), default), Times.Once);
         _cancelHandlerMock.Verify(x => x.HandleAsync(It.IsAny<Message>(), default), Times.Never);
+        _emptyHandlerMock.Verify(x => x.HandleAsync(It.IsAny<Message>(), default), Times.Never);
     }
 
     [Test]
-    public void When_SendNoneMessage_Then_DoNothing()
+    public void WhenSend_CancelMessage_ThenHandleCancelHandler()
+    {
+        var message = new Message
+        {
+            Text = "cancel",
+            Chat = new Chat
+            {
+                Id = 1
+            },
+            From = new User
+            {
+                Id = 1
+            }
+        };
+
+        Assert.DoesNotThrowAsync(async () => await _mediator.Send(message));
+        _startHandlerMock.Verify(x => x.HandleAsync(It.IsAny<Message>(), default), Times.Never);
+        _cancelHandlerMock.Verify(x => x.HandleAsync(It.IsAny<Message>(), default), Times.Once);
+        _emptyHandlerMock.Verify(x => x.HandleAsync(It.IsAny<Message>(), default), Times.Never);
+    }
+    [Test]
+    public void WhenSend_NoneMessage_ThenHandleEmptyHandler()
     {
         var message = new Message
         {
@@ -84,5 +114,6 @@ public class MediatorTests
         Assert.DoesNotThrowAsync(async () => await _mediator.Send(message));
         _startHandlerMock.Verify(x => x.HandleAsync(It.IsAny<Message>(), default), Times.Never);
         _cancelHandlerMock.Verify(x => x.HandleAsync(It.IsAny<Message>(), default), Times.Never);
+        _emptyHandlerMock.Verify(x => x.HandleAsync(It.IsAny<Message>(), default), Times.Once);
     }
 }

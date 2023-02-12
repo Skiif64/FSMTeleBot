@@ -3,6 +3,7 @@ using Telegram.Bot.Types.Enums;
 
 namespace FSMTeleBot.Filters;
 
+[AttributeUsage(AttributeTargets.Class, Inherited = true)]
 public abstract class FilterAttribute : Attribute
 {
     public ChatMemberStatus? Allowed { get; init; }

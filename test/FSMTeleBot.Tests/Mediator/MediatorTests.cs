@@ -1,9 +1,7 @@
 ﻿using FSMTeleBot.Filters;
 using FSMTeleBot.Handlers.Abstractions;
 using FSMTeleBot.Internal.Mediator;
-using Microsoft.Extensions.DependencyInjection;
 using Moq;
-using System.Collections.Generic;
 using System.ComponentModel;
 using Telegram.Bot.Types;
 
@@ -15,7 +13,7 @@ public class MediatorTests
     private readonly IBotMediator _mediator;
     private readonly Mock<IHandler<Message>> _startHandlerMock;
     private readonly Mock<IHandler<Message>> _cancelHandlerMock;
-
+    
     public MediatorTests()
     {
         _startHandlerMock = new Mock<IHandler<Message>>();
@@ -51,7 +49,15 @@ public class MediatorTests
     {
         var message = new Message
         {
-            Text = "start"
+            Text = "start",
+            Chat = new Chat
+            {
+                Id = 1
+            },
+            From = new User
+            {
+                Id = 1
+            }
         };
 
         Assert.DoesNotThrowAsync(async () => await _mediator.Send(message));
@@ -64,7 +70,15 @@ public class MediatorTests
     {
         var message = new Message
         {
-            Text = "none"
+            Text = "none",
+            Chat = new Chat
+            {
+                Id = 1
+            },
+            From = new User
+            {
+                Id = 1
+            }
         };
 
         Assert.DoesNotThrowAsync(async () => await _mediator.Send(message));

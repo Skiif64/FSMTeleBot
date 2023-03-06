@@ -4,39 +4,25 @@ using Telegram.Bot;
 using Telegram.Bot.Polling;
 
 namespace FSMTeleBot;
-public enum ReceivingMode
-{
-    LongPolling,
-    Webhook
-}
 public class TelegramBot : ITelegramBot
 {
     private readonly TelegramBotOptions _options;
     private readonly IUpdateHandler _updateHandler;
     private readonly IServiceProvider _serviceProvider;
-    public ReceivingMode ReceivingMode { get; }
+   
 
     public TelegramBot(TelegramBotOptions options, IUpdateHandler updateHandler, IServiceProvider serviceProvider)
     {
         _options = options;
         _updateHandler = updateHandler;
-        _serviceProvider = serviceProvider;
-
-        if (_options.UseWebhook)
-            ReceivingMode = ReceivingMode.Webhook;
-        else
-            ReceivingMode = ReceivingMode.LongPolling;
+        _serviceProvider = serviceProvider;        
     }
 
     public async Task StartAsync(CancellationToken cancellationToken = default)
     {
         await using var scope = _serviceProvider.CreateAsyncScope();
         var client = (ITelegramBotClient)scope.ServiceProvider.GetService(typeof(ITelegramBotClient))!;
-        if (ReceivingMode == ReceivingMode.LongPolling)
-        {
-            client.StartReceiving(_updateHandler, _options.ReceiverOptions, cancellationToken);
-        }
-        else
+        if (_options.UseWebhook)
         {
             if (_options.WebhookOptions is null)
                 throw new ArgumentNullException(nameof(_options.WebhookOptions));
@@ -49,13 +35,17 @@ public class TelegramBot : ITelegramBot
                 _options.ReceiverOptions.ThrowPendingUpdates,
                 cancellationToken)
                 .ConfigureAwait(false);
-            //TODO: Start a server
+            //TODO: Start a server            
+        }
+        else
+        {
+            client.StartReceiving(_updateHandler, _options.ReceiverOptions, cancellationToken);
         }
     }
 
     public async Task StopAsync(CancellationToken cancellationToken = default)
     {
-        if (ReceivingMode == ReceivingMode.Webhook)
+        if (_options.UseWebhook)
         {
             await using var scope = _serviceProvider.CreateAsyncScope();
             var client = (ITelegramBotClient)scope.ServiceProvider.GetService(typeof(ITelegramBotClient))!;

@@ -5,5 +5,5 @@ namespace FSMTeleBot.Abstractions;
 
 public interface ITelegramBot : IHostedService
 {
-    public ReceivingMode ReceivingMode { get; }
+    
 }

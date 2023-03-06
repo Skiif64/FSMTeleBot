@@ -4,7 +4,7 @@ namespace FSMTeleBot.ChatState.Abstractions;
 
 public interface IChatStateGroup
 {
-    ImmutableArray<IChatState> States { get; }
+    IReadOnlyList<IChatState> States { get; }
     IChatState this[int index] { get; }
 
     Task<IChatState> Next(IChatContext context, CancellationToken cancellationToken = default);

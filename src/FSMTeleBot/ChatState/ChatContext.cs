@@ -1,4 +1,5 @@
-﻿using FSMTeleBot.ChatState.Abstractions;
+﻿using FSMTeleBot.Abstractions;
+using FSMTeleBot.ChatState.Abstractions;
 
 namespace FSMTeleBot.ChatState;
 

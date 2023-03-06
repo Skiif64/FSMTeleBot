@@ -1,4 +1,5 @@
-﻿using FSMTeleBot.ChatState;
+﻿using FSMTeleBot.Abstractions;
+using FSMTeleBot.ChatState;
 using FSMTeleBot.ChatState.Abstractions;
 using Moq;
 

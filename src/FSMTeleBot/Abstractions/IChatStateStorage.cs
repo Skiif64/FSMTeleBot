@@ -1,4 +1,6 @@
-﻿namespace FSMTeleBot.ChatState.Abstractions;
+﻿using FSMTeleBot.ChatState.Abstractions;
+
+namespace FSMTeleBot.Abstractions;
 
 public interface IChatStateStorage
 {

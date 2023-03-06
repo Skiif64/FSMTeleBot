@@ -7,15 +7,16 @@ namespace FSMTeleBot.ChatState;
 public abstract class ChatStateGroup : IChatStateGroup
 {
     private int _currentStateIndex = 0;
+    public string Name { get; } //TODO: Initialize this
     public IReadOnlyList<IChatState> States { get; private set; }
     public IChatState this[int index] => States[index];
 
     public ChatStateGroup()
     {
-
+        
     }
 
-    internal void InitState(ChatStateGroup child)
+    internal void InitState(ChatStateGroup child) //TODO: Remove this
     {
         var childType = child.GetType();
         var properties = childType           

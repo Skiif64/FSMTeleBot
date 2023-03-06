@@ -39,7 +39,7 @@ namespace FSMTeleBot.Internal.DependencyInjectionExtensions
             {
                 var state = (ChatStateGroup)Activator.CreateInstance(stateType)!;
                 state.InitState(state);
-                services.AddSingleton(typeof(IChatStateGroup), state);
+                services.AddSingleton(typeof(IChatStateGroup), state); //TODO: Remove this
             }  
 
             return services;

@@ -62,6 +62,28 @@ public class MessageFilterTests
     }
 
     [Test]
+    public void WhenFilterWithContainsIsMatch_InvalidMessageText_ThenShouldReturnFalse()
+    {
+        var message = new Message
+        {
+            Text = "messsssage",
+            From = new User
+            {
+                Id = 1
+            },
+            Chat = new Chat
+            {
+                Id = 1
+            }
+        };
+
+        var result = _filterWithContains.IsMatch(message, _serviceProvider);
+
+        Assert.That(result, Is.False);
+
+    }
+
+    [Test]
     public void WhenFilterWithContainsIsMatch_ContainsMessageText_ThenShouldReturnTrue()
     {
         var message = new Message
@@ -102,6 +124,28 @@ public class MessageFilterTests
         var result = _filterWithContainsCommand.IsMatch(message, _serviceProvider);
 
         Assert.IsTrue(result);
+
+    }
+
+    [Test]
+    public void WhenFilterWithContainsCommandIsMatch_NotContainsCommand_ThenShouldReturnFalse()
+    {
+        var message = new Message
+        {
+            Text = "start",
+            From = new User
+            {
+                Id = 1
+            },
+            Chat = new Chat
+            {
+                Id = 1
+            }
+        };
+
+        var result = _filterWithContainsCommand.IsMatch(message, _serviceProvider);
+
+        Assert.That(result, Is.False);
 
     }
 
@@ -173,6 +217,33 @@ public class MessageFilterTests
         var result = _filterWithChatStateRequired.IsMatch(message, _serviceProvider);
 
         Assert.IsTrue(result);
+        _chatContextMock.VerifyGet(x => x.CurrentState, Times.Once);
+    }
+
+    [Test]
+    public void WhenFilterWithRequiredStateIsMatch_NotInRequiredState_ThenShouldReturnFalse()
+    {
+        var message = new Message
+        {
+            Text = "none",
+            From = new User
+            {
+                Id = 1
+            },
+            Chat = new Chat
+            {
+                Id = 1
+            }
+        };
+
+        _chatContextMock.Reset();
+        _chatContextMock
+            .SetupGet(x => x.CurrentState)
+            .Returns(FakeStateGroup.State2);
+
+        var result = _filterWithChatStateRequired.IsMatch(message, _serviceProvider);
+
+        Assert.That(result, Is.False);
         _chatContextMock.VerifyGet(x => x.CurrentState, Times.Once);
     }
 }

@@ -2,5 +2,5 @@
 
 public interface IBotBuilder
 {
-    Task<ITelegramBot> BuildAsync(CancellationToken cancellationToken = default);
+    ITelegramBot Build();
 }

@@ -49,6 +49,7 @@ public class TelegramBot : ITelegramBot
                 _options.ReceiverOptions.ThrowPendingUpdates,
                 cancellationToken)
                 .ConfigureAwait(false);
+            //TODO: Start a server
         }
     }
 

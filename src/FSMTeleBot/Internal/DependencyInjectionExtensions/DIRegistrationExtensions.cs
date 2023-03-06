@@ -29,18 +29,19 @@ namespace FSMTeleBot.Internal.DependencyInjectionExtensions
             return services;
         }
 
-        public static IServiceCollection InitializeStateGroups(this IServiceCollection services, params Assembly[] assemblies) 
+        public static IServiceCollection AddStateGroups(this IServiceCollection services, params Assembly[] assemblies) 
         {
             var stateTypes = assemblies
-                .SelectMany(assembly => assembly.DefinedTypes)
-                .Where(type => type.IsAssignableTo(typeof(ChatStateGroup)));
+                .SelectMany(assembly => assembly.DefinedTypes)                
+                .Where(type => type.IsAssignableTo(typeof(IChatStateGroup)));
 
             foreach(var stateType in stateTypes)
             {
                 var state = (ChatStateGroup)Activator.CreateInstance(stateType)!;
                 state.InitState(state);
-            }
-               
+                services.AddSingleton(typeof(IChatStateGroup), state);
+            }  
+
             return services;
         }
     }

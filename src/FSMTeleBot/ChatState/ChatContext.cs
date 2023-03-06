@@ -7,8 +7,7 @@ public class ChatContext : IChatContext
 {
     private readonly IChatStateStorage _storage;
     private readonly long _chatId;
-    private readonly long _userId;
-    private IChatStateGroup? _stateGroup; //TODO: Lazy load?    
+    private readonly long _userId;    
     public IChatState? CurrentState { get; private set; }
 
     internal ChatContext(long chatId, long userId, IChatStateStorage storage)
@@ -16,16 +15,7 @@ public class ChatContext : IChatContext
         _chatId = chatId;
         _userId = userId;
         _storage = storage;
-    }
-
-    public async Task SetStateGroupAsync(IChatStateGroup stateGroup, CancellationToken cancellationToken = default)
-    {
-        _stateGroup = stateGroup;
-        CurrentState = stateGroup[0];
-        await _storage
-            .UpdateAsync(_chatId, _userId, CurrentState, cancellationToken)
-            .ConfigureAwait(false);
-    }
+    }    
 
     public async Task SetStateAsync(IChatState state, CancellationToken cancellationToken = default)
     {
@@ -36,8 +26,7 @@ public class ChatContext : IChatContext
     }
 
     public async Task FinishStateAsync(CancellationToken cancellationToken = default)
-    {
-        _stateGroup = null;
+    {        
         CurrentState = null;
         await _storage
             .UpdateAsync(_chatId, _userId, null, cancellationToken)

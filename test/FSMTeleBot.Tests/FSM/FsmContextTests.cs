@@ -31,12 +31,10 @@ public class FsmContextTests
     }
 
     [Test]
-    public async Task When_SetStateGroup_ThenStorageShouldBeUpdated()
+    public async Task When_SetState_ThenStorageShouldBeUpdated()
     {
-        var stateGroupMock = new Mock<IChatStateGroup>();
-        stateGroupMock.Setup(x => x[0])
-            .Returns(It.IsAny<IChatState>());
-        await _context.SetStateGroupAsync(stateGroupMock.Object, default);
+        var stateGroupMock = new Mock<IChatState>();        
+        await _context.SetStateAsync(stateGroupMock.Object, default);
         _storageMock.Verify(x => x.UpdateAsync(1, 1, It.IsAny<IChatState>(), default), Times.Once);
     }
 }

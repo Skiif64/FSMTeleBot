@@ -1,4 +1,5 @@
-﻿namespace FSMTeleBot.Handlers.Abstractions;
+﻿
+namespace FSMTeleBot.Handlers.Abstractions;
 
 public interface IHandler<T>
 {

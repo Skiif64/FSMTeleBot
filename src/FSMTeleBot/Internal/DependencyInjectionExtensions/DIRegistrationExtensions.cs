@@ -1,6 +1,4 @@
-﻿using FSMTeleBot.ChatState;
-using FSMTeleBot.ChatState.Abstractions;
-using FSMTeleBot.Handlers.Abstractions;
+﻿using FSMTeleBot.Handlers.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Telegram.Bot.Types;
@@ -27,22 +25,6 @@ namespace FSMTeleBot.Internal.DependencyInjectionExtensions
             }
 
             return services;
-        }
-
-        public static IServiceCollection AddStateGroups(this IServiceCollection services, params Assembly[] assemblies) 
-        {
-            var stateTypes = assemblies
-                .SelectMany(assembly => assembly.DefinedTypes)                
-                .Where(type => type.IsAssignableTo(typeof(IChatStateGroup)));
-
-            foreach(var stateType in stateTypes)
-            {
-                var state = (ChatStateGroup)Activator.CreateInstance(stateType)!;
-                state.InitState(state);
-                services.AddSingleton(typeof(IChatStateGroup), state); //TODO: Remove this
-            }  
-
-            return services;
-        }
+        }        
     }
 }

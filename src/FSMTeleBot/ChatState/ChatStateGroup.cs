@@ -15,7 +15,7 @@ public abstract class ChatStateGroup : IChatStateGroup
 
     }
 
-    protected void InitState(ChatStateGroup child)
+    internal void InitState(ChatStateGroup child)
     {
         var childType = child.GetType();
         var properties = childType           

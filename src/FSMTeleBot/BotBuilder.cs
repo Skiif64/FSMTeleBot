@@ -5,7 +5,7 @@ namespace FSMTeleBot;
 public class BotBuilder : IBotBuilder
 {
 
-    public Task BuildAsync(CancellationToken cancellationToken = default)
+    public Task<ITelegramBot> BuildAsync(CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

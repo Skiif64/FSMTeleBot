@@ -17,6 +17,14 @@ internal static class TypeExtensions
         throw new InvalidOperationException();//TODO: normal exception
     }
 
+    public static bool IsImplementationOfGeneric(this Type type, Type implementingType)
+    {
+        if (!type.IsGenericType || !implementingType.IsGenericType)
+            throw new ArgumentException("type is not generic type");
+
+        return type.IsAssignableFrom(implementingType.GetGenericTypeDefinition());
+    }
+
     public static Type[] GetAllImplementationOfGenericInterface(this Type baseType, Assembly assembly)
     {
         return (from x in assembly.GetTypes()

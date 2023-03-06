@@ -22,4 +22,8 @@
     <ProjectReference Include="..\..\src\FSMTeleBot\FSMTeleBot.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DITests\" />
+  </ItemGroup>
+
 </Project>

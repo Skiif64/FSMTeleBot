@@ -9,7 +9,7 @@ public class BotBuilderConfiguration
 {
     public List<Assembly> Assemblies { get; private set; } = new();
     public Type TelegramBotClientImplementationType { get; private set; } = typeof(TelegramBotClient);
-    public Type StateStorageImplementationType { get; private set; } = null!;
+    public Type StateStorageImplementationType { get; private set; } = typeof(InMemoryStateStorage);
     public Type MemberServiceImplementationType { get; private set; } = typeof(ChatMemberService);
 
     internal BotBuilderConfiguration()

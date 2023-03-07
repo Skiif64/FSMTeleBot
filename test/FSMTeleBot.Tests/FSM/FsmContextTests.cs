@@ -8,14 +8,12 @@ namespace FSMTeleBot.Tests.FSM;
 public class FsmContextTests
 {
     private readonly Mock<IChatStateStorage> _storageMock;
-    private readonly IChatStateStorage _storage;
-    private readonly ChatContext _context;
+    private readonly IChatStateStorage _storage;    
 
     public FsmContextTests()
     {
         _storageMock = new Mock<IChatStateStorage>();
-        _storage = _storageMock.Object;
-        _context = new ChatContext(1, 1, _storage);
+        _storage = _storageMock.Object;        
     }
 
     [SetUp]
@@ -31,12 +29,11 @@ public class FsmContextTests
     }
 
     [Test]
-    public async Task When_SetStateGroup_ThenStorageShouldBeUpdated()
+    public async Task WhenSetState_ThenStorageShouldBeUpdated()
     {
-        var stateGroupMock = new Mock<IChatStateGroup>();
-        stateGroupMock.Setup(x => x[0])
-            .Returns(It.IsAny<IChatState>());
-        await _context.SetStateGroupAsync(stateGroupMock.Object, default);
+        var context = new ChatContext(1, 1, _storage, It.IsAny<IChatState>());
+        var stateGroupMock = new Mock<IChatState>();        
+        await context.SetStateAsync(stateGroupMock.Object, default);
         _storageMock.Verify(x => x.UpdateAsync(1, 1, It.IsAny<IChatState>(), default), Times.Once);
     }
 }

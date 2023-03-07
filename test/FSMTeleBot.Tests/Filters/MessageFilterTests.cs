@@ -6,11 +6,21 @@ using Moq;
 using Telegram.Bot.Types;
 
 namespace FSMTeleBot.Tests.Filters;
+public class FakeState1 : IChatState
+{
+    public string Name => "Fake1";
+}
+
+public class FakeState2 : IChatState
+{
+    public string Name => "Fake2";
+}
 
 public class MessageFilterTests
 {
     private readonly IServiceProvider _serviceProvider;
-
+    private readonly IChatState _chatState1;
+    private readonly IChatState _chatState2;
     private readonly Mock<IChatContext> _chatContextMock;
 
     private readonly MessageFilterAttribute _filterWithContains;
@@ -20,17 +30,18 @@ public class MessageFilterTests
     public MessageFilterTests()
     {
         _chatContextMock = new Mock<IChatContext>();
-        
+        _chatState1 = new FakeState1();
+        _chatState2 = new FakeState2();
         var serviceProviderMock = new Mock<IServiceProvider>();
         serviceProviderMock
             .Setup(x => x.GetService(typeof(IChatContext)))
             .Returns(_chatContextMock.Object);
         _serviceProvider = serviceProviderMock.Object;
-        new FakeStateGroup(); //TODO: invalid
+        
         _filterWithContains = new MessageFilterAttribute { Contains = "message" };
         _filterWithContainsCommand = new MessageFilterAttribute { ContainsCommand = "start" };
         _filterWithRegexp = new MessageFilterAttribute { Regexp = @"^[0-9]+" };
-        _filterWithChatStateRequired = new MessageFilterAttribute { RequiredState = FakeStateGroup.State1 };
+        _filterWithChatStateRequired = new MessageFilterAttribute { RequiredState = _chatState1 };
     }
 
     [SetUp]
@@ -212,7 +223,7 @@ public class MessageFilterTests
         _chatContextMock.Reset();
         _chatContextMock
             .SetupGet(x => x.CurrentState)
-            .Returns(FakeStateGroup.State1);
+            .Returns(_chatState1);
 
         var result = _filterWithChatStateRequired.IsMatch(message, _serviceProvider);
 
@@ -239,7 +250,7 @@ public class MessageFilterTests
         _chatContextMock.Reset();
         _chatContextMock
             .SetupGet(x => x.CurrentState)
-            .Returns(FakeStateGroup.State2);
+            .Returns(_chatState2);
 
         var result = _filterWithChatStateRequired.IsMatch(message, _serviceProvider);
 

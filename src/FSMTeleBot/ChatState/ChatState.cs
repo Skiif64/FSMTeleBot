@@ -15,9 +15,6 @@ public readonly struct ChatState : IChatState
         if (obj is not ChatState other)
             return false;
 
-        if (Name == "*" || other.Name == "*")
-            return true;
-
         return Name.Equals(other.Name);
     }
 
@@ -28,6 +25,4 @@ public readonly struct ChatState : IChatState
 
     public static bool operator ==(ChatState left, ChatState right) => left.Equals(right);  
     public static bool operator !=(ChatState left, ChatState right) => !left.Equals(right);
-
-    public static ChatState Any() => new ChatState("*");
 }

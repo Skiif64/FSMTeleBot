@@ -36,7 +36,7 @@ public class RegistrationTests
     {
         var serviceCollection = new ServiceCollection();
 
-        serviceCollection.AddHandlers(typeof(RegistrationTests).Assembly);
+        serviceCollection.AddHandlers(new[] { typeof(RegistrationTests).Assembly });
 
         CollectionAssert.IsNotEmpty(serviceCollection);
 

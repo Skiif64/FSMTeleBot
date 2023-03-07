@@ -10,12 +10,12 @@ public class ChatContext : IChatContext
     private readonly long _userId;    
     public IChatState CurrentState { get; private set; }
 
-    internal ChatContext(long chatId, long userId, IChatStateStorage storage)
+    internal ChatContext(long chatId, long userId, IChatStateStorage storage, IChatState currentState)
     {
         _chatId = chatId;
         _userId = userId;
         _storage = storage;
-        CurrentState = storage.GetOrAddAsync(chatId, _userId, null).Result; //TODO: Change this
+        CurrentState = currentState;
     }    
 
     public async Task SetStateAsync(IChatState state, CancellationToken cancellationToken = default)

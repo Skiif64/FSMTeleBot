@@ -11,23 +11,28 @@ public class BotBuilderConfiguration
     public Type TelegramBotClientImplementationType { get; private set; } = typeof(TelegramBotClient);
     public Type StateStorageImplementationType { get; private set; } = null!;
     public Type MemberServiceImplementationType { get; private set; } = typeof(ChatMemberService);
+
+    internal BotBuilderConfiguration()
+    {
+
+    }
         
     public BotBuilderConfiguration AddAssemblyFrom<T>() 
         => AddAssemblyFrom(typeof(T));
 
     public BotBuilderConfiguration AddAssemblyFrom(Type type) 
-        => AddAssemblyToScan(type.Assembly);
+        => AddAssembly(type.Assembly);
 
     public BotBuilderConfiguration UseCustomTelegramBotClient<TClient>() where TClient : ITelegramBotClient
         => UseCustomTelegramBotClient(typeof(TClient));
 
-    public BotBuilderConfiguration UseStateStorage<TStorage>() where TStorage : IChatStateStorage
-        => UseStateStorage(typeof(TStorage));
+    public BotBuilderConfiguration UseCustomStateStorage<TStorage>() where TStorage : IChatStateStorage
+        => UseCustomStateStorage(typeof(TStorage));
 
     public BotBuilderConfiguration UseCustomMemberService<TService>() where TService : IChatMemberService
         => UseCustomMemberService(typeof(TService));
 
-    public BotBuilderConfiguration AddAssemblyToScan(Assembly assembly)
+    public BotBuilderConfiguration AddAssembly(Assembly assembly)
     {
         Assemblies.Add(assembly);
         return this;
@@ -41,7 +46,7 @@ public class BotBuilderConfiguration
         return this;
     }
 
-    public BotBuilderConfiguration UseStateStorage(Type storageType)
+    public BotBuilderConfiguration UseCustomStateStorage(Type storageType)
     {
         if (!storageType.IsAssignableTo(typeof(IChatStateStorage)))
             throw new ArgumentException($"Type {storageType.GetType().Name} is not implementing IChatStateStorage interface.");

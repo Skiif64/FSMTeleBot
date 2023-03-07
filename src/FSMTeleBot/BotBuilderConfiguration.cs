@@ -18,11 +18,14 @@ public class BotBuilderConfiguration
     public BotBuilderConfiguration AddAssemblyFrom(Type type) 
         => AddAssemblyToScan(type.Assembly);
 
-    public BotBuilderConfiguration UseCustomTelegramBotClient<TClient>()
+    public BotBuilderConfiguration UseCustomTelegramBotClient<TClient>() where TClient : ITelegramBotClient
         => UseCustomTelegramBotClient(typeof(TClient));
 
-    public BotBuilderConfiguration UseStateStorage<TStorage>() 
+    public BotBuilderConfiguration UseStateStorage<TStorage>() where TStorage : IChatStateStorage
         => UseStateStorage(typeof(TStorage));
+
+    public BotBuilderConfiguration UseCustomMemberService<TService>() where TService : IChatMemberService
+        => UseCustomMemberService(typeof(TService));
 
     public BotBuilderConfiguration AddAssemblyToScan(Assembly assembly)
     {

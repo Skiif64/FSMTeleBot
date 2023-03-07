@@ -40,7 +40,7 @@ public class InMemoryStateStorage : IChatStateStorage
     public Task UpdateAsync(long chatId, long userId, IChatState state, CancellationToken cancellationToken = default)
     {
         var key = new ChatUserId(chatId, userId);
-        _storage.AddOrUpdate(key, state, (key, state) => state);
+        _storage.AddOrUpdate(key, state, (key, value) => state);
         return Task.CompletedTask;
     }
 }

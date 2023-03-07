@@ -27,6 +27,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient(typeof(ITelegramBotClient), configuration.TelegramBotClientImplementationType);
         services.AddScoped(typeof(IChatStateStorage), configuration.StateStorageImplementationType);
         services.AddScoped(typeof(IChatMemberService), configuration.MemberServiceImplementationType);
+        services.AddHostedService<TelegramBot>();
         return services;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace FSMTeleBot.ChatState;
 
-public class ChatState : IChatState
+public readonly struct ChatState : IChatState
 {
     public string Name { get; }
     public ChatState(string name)
@@ -15,6 +15,9 @@ public class ChatState : IChatState
         if (obj is not ChatState other)
             return false;
 
+        if (Name == "*" || other.Name == "*")
+            return true;
+
         return Name.Equals(other.Name);
     }
 
@@ -22,4 +25,9 @@ public class ChatState : IChatState
     {
         return Name.GetHashCode();
     }
+
+    public static bool operator ==(ChatState left, ChatState right) => left.Equals(right);  
+    public static bool operator !=(ChatState left, ChatState right) => !left.Equals(right);
+
+    public static ChatState Any() => new ChatState("*");
 }

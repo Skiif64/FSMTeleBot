@@ -6,9 +6,7 @@ using Telegram.Bot.Types;
 namespace FSMTeleBot.Internal.DependencyInjectionExtensions
 {
     internal static class DIRegistrationExtensions
-    {
-        public static IServiceCollection AddHandlers(this IServiceCollection services, params Assembly[] assemblies)
-            => services.AddHandlers(assemblies);
+    {        
         public static IServiceCollection AddHandlers(this IServiceCollection services, IEnumerable<Assembly> assemblies)
         {
             var handlerTypes = new[]

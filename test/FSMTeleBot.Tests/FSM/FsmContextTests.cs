@@ -21,7 +21,7 @@ public class FsmContextTests
     {
         _storageMock.Reset();         
         _storageMock
-            .Setup( x => x.GetOrAddAsync(1, 1, It.IsAny<IChatState>(), default))
+            .Setup( x => x.GetOrInit(1, 1, default))
             .Returns(Task.FromResult(It.IsAny<IChatState>()));
         _storageMock
             .Setup(x => x.UpdateAsync(1, 1, It.IsAny<IChatState>(), default))

@@ -5,6 +5,10 @@ namespace FSMTeleBot.ChatState;
 public readonly struct ChatState : IChatState
 {
     public string Name { get; }
+    public ChatState()
+    {
+        Name = string.Empty;
+    }
     public ChatState(string name)
     {
         Name = name;

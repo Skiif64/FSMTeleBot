@@ -2,13 +2,12 @@
 using FSMTeleBot.ChatState.Abstractions;
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
-
 namespace FSMTeleBot.Services;
 
 public class InMemoryStateStorage : IChatStateStorage
 {
     private readonly struct ChatUserId
-    {
+    {        
         public long ChatId { get; }
         public long UserId { get; }
         public ChatUserId(long chatId, long userId)
@@ -29,11 +28,12 @@ public class InMemoryStateStorage : IChatStateStorage
             return unchecked(ChatId.GetHashCode() + UserId.GetHashCode());
         }
     }
+    private static readonly IChatState _initialState = new ChatState.ChatState();
     private readonly ConcurrentDictionary<ChatUserId, IChatState> _storage = new();
-    public Task<IChatState> GetOrAddAsync(long chatId, long userId, IChatState toAddState, CancellationToken cancellationToken = default)
+    public Task<IChatState> GetOrInit(long chatId, long userId, CancellationToken cancellationToken = default)
     {
         var key = new ChatUserId(chatId, userId);
-        var newState = _storage.GetOrAdd(key, toAddState);
+        var newState = _storage.GetOrAdd(key, _initialState);
         return Task.FromResult(newState);
     }
 

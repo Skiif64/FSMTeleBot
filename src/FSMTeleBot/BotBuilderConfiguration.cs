@@ -1,5 +1,7 @@
 ﻿using FSMTeleBot.Abstractions;
 using FSMTeleBot.Services;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Telegram.Bot;
 
@@ -11,6 +13,8 @@ public class BotBuilderConfiguration
     public Type TelegramBotClientImplementationType { get; private set; } = typeof(TelegramBotClient);
     public Type StateStorageImplementationType { get; private set; } = typeof(InMemoryStateStorage);
     public Type MemberServiceImplementationType { get; private set; } = typeof(ChatMemberService);
+    public Func<TelegramBotOptions>? OptionsFactory { get; private set; }
+    public Action<IConfiguration, IServiceCollection>? OptionsRegistration { get; private set; }
 
     internal BotBuilderConfiguration()
     {
@@ -35,6 +39,19 @@ public class BotBuilderConfiguration
     public BotBuilderConfiguration AddAssembly(Assembly assembly)
     {
         Assemblies.Add(assembly);
+        return this;
+    }
+
+    public BotBuilderConfiguration UseOptions(Func<TelegramBotOptions> optionsFactory,
+        Action<IConfiguration, IServiceCollection>? optionsRegistration = null)
+    {
+        OptionsFactory = optionsFactory;
+
+        if (optionsRegistration is null)
+            optionsRegistration = (cfg, services) => services
+            .AddSingleton<TelegramBotOptions>(sp => OptionsFactory.Invoke());
+
+        OptionsRegistration = optionsRegistration;
         return this;
     }
 

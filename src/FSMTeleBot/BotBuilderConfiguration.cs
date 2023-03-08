@@ -14,7 +14,7 @@ public class BotBuilderConfiguration
     public Type StateStorageImplementationType { get; private set; } = typeof(InMemoryStateStorage);
     public Type MemberServiceImplementationType { get; private set; } = typeof(ChatMemberService);
     public Func<TelegramBotOptions>? OptionsFactory { get; private set; }
-    public Action<IConfiguration, IServiceCollection>? OptionsRegistration { get; private set; }
+    public Action<IServiceCollection>? OptionsRegistration { get; private set; }
 
     internal BotBuilderConfiguration()
     {
@@ -29,7 +29,7 @@ public class BotBuilderConfiguration
 
     public BotBuilderConfiguration UseBuiltinOptions(Func<TelegramBotOptions> optionsFactory)
         => UseOptions(optionsFactory,
-            (cfg, services) => services.AddSingleton(sp => optionsFactory.Invoke()));
+            services => services.AddSingleton(sp => optionsFactory.Invoke()));
 
     public BotBuilderConfiguration UseCustomTelegramBotClient<TClient>() where TClient : ITelegramBotClient
         => UseCustomTelegramBotClient(typeof(TClient));
@@ -47,7 +47,7 @@ public class BotBuilderConfiguration
     }
 
     public BotBuilderConfiguration UseOptions(Func<TelegramBotOptions> optionsFactory,
-        Action<IConfiguration, IServiceCollection> optionsRegistration)
+        Action<IServiceCollection> optionsRegistration)
     {
         OptionsFactory = optionsFactory; 
         OptionsRegistration = optionsRegistration;

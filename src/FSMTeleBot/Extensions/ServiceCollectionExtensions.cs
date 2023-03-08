@@ -11,6 +11,7 @@ public static class ServiceCollectionExtensions
     {
         var configuration = new BotBuilderConfiguration();
         configAction.Invoke(configuration);
+        configuration.OptionsRegistration?.Invoke(services);
         services.AddHandlers(configuration);
         services.AddRequiredServices(configuration);
         return services;

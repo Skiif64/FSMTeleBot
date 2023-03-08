@@ -2,6 +2,7 @@
 using FSMTeleBot.Internal.DependencyInjectionExtensions;
 using Microsoft.Extensions.DependencyInjection;
 using Telegram.Bot;
+using Telegram.Bot.Polling;
 
 namespace FSMTeleBot.Extensions;
 
@@ -28,6 +29,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient(typeof(ITelegramBotClient), configuration.TelegramBotClientImplementationType);
         services.AddScoped(typeof(IChatStateStorage), configuration.StateStorageImplementationType);
         services.AddScoped(typeof(IChatMemberService), configuration.MemberServiceImplementationType);
+        services.AddSingleton(typeof(IUpdateHandler), configuration.UpdateHandlerImplementationType);
         services.AddHostedService<TelegramBot>();
         return services;
     }

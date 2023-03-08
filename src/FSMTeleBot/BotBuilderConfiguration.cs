@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Telegram.Bot;
+using Telegram.Bot.Polling;
 
 namespace FSMTeleBot;
 
@@ -13,6 +14,7 @@ public class BotBuilderConfiguration
     public Type TelegramBotClientImplementationType { get; private set; } = typeof(TelegramBotClient);
     public Type StateStorageImplementationType { get; private set; } = typeof(InMemoryStateStorage);
     public Type MemberServiceImplementationType { get; private set; } = typeof(ChatMemberService);
+    public Type UpdateHandlerImplementationType { get; private set; } = typeof(DefaultUpdateHandler);
     public Func<TelegramBotOptions>? OptionsFactory { get; private set; }
     public Action<IServiceCollection>? OptionsRegistration { get; private set; }
 
@@ -39,6 +41,9 @@ public class BotBuilderConfiguration
 
     public BotBuilderConfiguration UseCustomMemberService<TService>() where TService : IChatMemberService
         => UseCustomMemberService(typeof(TService));
+
+    public BotBuilderConfiguration UseCustomUpdateHandler<THandler>() where THandler : IUpdateHandler
+        => UseCustomUpdateHandler(typeof(THandler));
     
     public BotBuilderConfiguration AddAssembly(Assembly assembly)
     {
@@ -75,6 +80,14 @@ public class BotBuilderConfiguration
         if (!serviceType.IsAssignableTo(typeof(IChatMemberService)))
             throw new ArgumentException($"Type {serviceType.GetType().Name} is not implementing IChatMemberService interface.");
         MemberServiceImplementationType = serviceType;
+        return this;
+    }
+
+    public BotBuilderConfiguration UseCustomUpdateHandler(Type handlerType)
+    {
+        if (!handlerType.IsAssignableTo(typeof(IUpdateHandler)))
+            throw new ArgumentException($"Type {handlerType.GetType().Name} is not implementing IUpdateHandler interface.");
+        UpdateHandlerImplementationType = handlerType;
         return this;
     }
 }

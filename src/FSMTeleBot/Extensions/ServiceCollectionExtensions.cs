@@ -1,5 +1,6 @@
 ﻿using FSMTeleBot.Abstractions;
 using FSMTeleBot.Internal.DependencyInjectionExtensions;
+using FSMTeleBot.Internal.Mediator;
 using Microsoft.Extensions.DependencyInjection;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
@@ -26,10 +27,11 @@ public static class ServiceCollectionExtensions
 
     private static IServiceCollection AddRequiredServices(this IServiceCollection services, BotBuilderConfiguration configuration)
     {
-        services.AddTransient(typeof(ITelegramBotClient), configuration.TelegramBotClientImplementationType);
+        services.AddTransient(typeof(ITelegramBotClient), configuration.TelegramBotClientImplementationType); //TODO: can`t resolve dependency
         services.AddScoped(typeof(IChatStateStorage), configuration.StateStorageImplementationType);
         services.AddScoped(typeof(IChatMemberService), configuration.MemberServiceImplementationType);
         services.AddSingleton(typeof(IUpdateHandler), configuration.UpdateHandlerImplementationType);
+        services.AddSingleton(typeof(IBotMediator), typeof(BotMediator)); //TODO: Singleton???
         services.AddHostedService<TelegramBot>();
         return services;
     }

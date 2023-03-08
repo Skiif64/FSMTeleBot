@@ -14,7 +14,7 @@ public class BotBuilderConfiguration
     public Type TelegramBotClientImplementationType { get; private set; } = typeof(TelegramBotClient);
     public Type StateStorageImplementationType { get; private set; } = typeof(InMemoryStateStorage);
     public Type MemberServiceImplementationType { get; private set; } = typeof(ChatMemberService);
-    public Type UpdateHandlerImplementationType { get; private set; } = typeof(DefaultUpdateHandler);
+    public Type UpdateHandlerImplementationType { get; private set; } = typeof(Services.DefaultUpdateHandler);
     public Func<TelegramBotOptions>? OptionsFactory { get; private set; }
     public Action<IServiceCollection>? OptionsRegistration { get; private set; }
 

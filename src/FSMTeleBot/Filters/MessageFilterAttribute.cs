@@ -1,5 +1,5 @@
 ﻿using FSMTeleBot.Abstractions;
-using FSMTeleBot.ChatState.Abstractions;
+using FSMTeleBot.States.Abstractions;
 using System.Text.RegularExpressions;
 using Telegram.Bot.Types;
 

@@ -1,6 +1,6 @@
 ﻿using FSMTeleBot.Abstractions;
-using FSMTeleBot.ChatState;
-using FSMTeleBot.ChatState.Abstractions;
+using FSMTeleBot.States;
+using FSMTeleBot.States.Abstractions;
 using Moq;
 
 namespace FSMTeleBot.Tests.FSM;

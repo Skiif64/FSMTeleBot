@@ -1,5 +1,6 @@
 ﻿using FSMTeleBot.Abstractions;
-using FSMTeleBot.ChatState.Abstractions;
+using FSMTeleBot.States;
+using FSMTeleBot.States.Abstractions;
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 namespace FSMTeleBot.Services;
@@ -28,7 +29,7 @@ public class InMemoryStateStorage : IChatStateStorage
             return unchecked(ChatId.GetHashCode() + UserId.GetHashCode());
         }
     }
-    private static readonly IChatState _initialState = new ChatState.ChatState();
+    private static readonly IChatState _initialState = new ChatState();
     private readonly ConcurrentDictionary<ChatUserId, IChatState> _storage = new();
     public Task<IChatState> GetOrInit(long chatId, long userId, CancellationToken cancellationToken = default)
     {

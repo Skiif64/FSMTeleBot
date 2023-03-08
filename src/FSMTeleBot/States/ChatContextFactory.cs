@@ -1,7 +1,7 @@
 ﻿using FSMTeleBot.Abstractions;
-using FSMTeleBot.ChatState.Abstractions;
+using FSMTeleBot.States.Abstractions;
 
-namespace FSMTeleBot.ChatState;
+namespace FSMTeleBot.States;
 
 public class ChatContextFactory : IChatContextFactory
 {

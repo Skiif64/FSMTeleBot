@@ -1,4 +1,4 @@
-﻿namespace FSMTeleBot.ChatState.Abstractions;
+﻿namespace FSMTeleBot.States.Abstractions;
 
 public interface IChatState
 {

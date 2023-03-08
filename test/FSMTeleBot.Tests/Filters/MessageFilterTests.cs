@@ -1,6 +1,6 @@
-﻿using FSMTeleBot.ChatState.Abstractions;
-using FSMTeleBot.Filters;
+﻿using FSMTeleBot.Filters;
 using FSMTeleBot.Handlers.Abstractions;
+using FSMTeleBot.States.Abstractions;
 using FSMTeleBot.Tests.FSM;
 using Moq;
 using Telegram.Bot.Types;

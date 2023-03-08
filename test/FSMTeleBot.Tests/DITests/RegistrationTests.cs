@@ -1,5 +1,5 @@
-﻿using FSMTeleBot.ChatState;
-using FSMTeleBot.ChatState.Abstractions;
+﻿using FSMTeleBot.States;
+using FSMTeleBot.States.Abstractions;
 using FSMTeleBot.Handlers.Abstractions;
 using FSMTeleBot.Internal.DependencyInjectionExtensions;
 using Microsoft.Extensions.DependencyInjection;

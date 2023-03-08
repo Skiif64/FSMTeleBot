@@ -1,6 +1,6 @@
-﻿using FSMTeleBot.ChatState.Abstractions;
+﻿using FSMTeleBot.States.Abstractions;
 
-namespace FSMTeleBot.ChatState;
+namespace FSMTeleBot.States;
 
 public readonly struct ChatState : IChatState
 {
@@ -27,6 +27,6 @@ public readonly struct ChatState : IChatState
         return Name.GetHashCode();
     }
 
-    public static bool operator ==(ChatState left, ChatState right) => left.Equals(right);  
+    public static bool operator ==(ChatState left, ChatState right) => left.Equals(right);
     public static bool operator !=(ChatState left, ChatState right) => !left.Equals(right);
 }

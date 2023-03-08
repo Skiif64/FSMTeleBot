@@ -20,12 +20,16 @@ public class BotBuilderConfiguration
     {
 
     }
-        
+        //TODO: Move to extensions class
     public BotBuilderConfiguration AddAssemblyFrom<T>() 
         => AddAssemblyFrom(typeof(T));
 
     public BotBuilderConfiguration AddAssemblyFrom(Type type) 
         => AddAssembly(type.Assembly);
+
+    public BotBuilderConfiguration UseBuiltinOptions(Func<TelegramBotOptions> optionsFactory)
+        => UseOptions(optionsFactory,
+            (cfg, services) => services.AddSingleton(sp => optionsFactory.Invoke()));
 
     public BotBuilderConfiguration UseCustomTelegramBotClient<TClient>() where TClient : ITelegramBotClient
         => UseCustomTelegramBotClient(typeof(TClient));
@@ -35,7 +39,7 @@ public class BotBuilderConfiguration
 
     public BotBuilderConfiguration UseCustomMemberService<TService>() where TService : IChatMemberService
         => UseCustomMemberService(typeof(TService));
-
+    
     public BotBuilderConfiguration AddAssembly(Assembly assembly)
     {
         Assemblies.Add(assembly);
@@ -43,14 +47,9 @@ public class BotBuilderConfiguration
     }
 
     public BotBuilderConfiguration UseOptions(Func<TelegramBotOptions> optionsFactory,
-        Action<IConfiguration, IServiceCollection>? optionsRegistration = null)
+        Action<IConfiguration, IServiceCollection> optionsRegistration)
     {
-        OptionsFactory = optionsFactory;
-
-        if (optionsRegistration is null)
-            optionsRegistration = (cfg, services) => services
-            .AddSingleton<TelegramBotOptions>(sp => OptionsFactory.Invoke());
-
+        OptionsFactory = optionsFactory; 
         OptionsRegistration = optionsRegistration;
         return this;
     }

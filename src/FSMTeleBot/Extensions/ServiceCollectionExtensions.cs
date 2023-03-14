@@ -1,4 +1,5 @@
 ﻿using FSMTeleBot.Abstractions;
+using FSMTeleBot.Internal;
 using FSMTeleBot.Internal.DependencyInjectionExtensions;
 using FSMTeleBot.Internal.Mediator;
 using FSMTeleBot.States;
@@ -38,7 +39,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped(typeof(IChatStateStorage), configuration.StateStorageImplementationType);
         services.AddScoped(typeof(IChatMemberService), configuration.MemberServiceImplementationType);
         services.AddSingleton(typeof(IUpdateHandler), configuration.UpdateHandlerImplementationType);
-        services.AddSingleton<IBotMediator, BotMediator>(); //TODO: Singleton???        
+        services.AddSingleton<IBotMediator, BotMediator>(); //TODO: Singleton???
+        services.AddScoped<IChatContextFactory, ChatContextFactory>();                                                            
         services.AddHostedService<TelegramBot>();
         return services;
     }

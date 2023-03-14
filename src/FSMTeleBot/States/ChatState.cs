@@ -32,6 +32,11 @@ public readonly struct ChatState : IChatState
         return Name.GetHashCode();
     }
 
+    public override string ToString()
+    {
+        return Name;
+    }
+
     public static bool operator ==(ChatState left, ChatState right) => left.Equals(right);
     public static bool operator !=(ChatState left, ChatState right) => !left.Equals(right);
 }

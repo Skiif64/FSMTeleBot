@@ -16,9 +16,9 @@ namespace FSMTeleBot.Internal.DependencyInjectionExtensions
             foreach (var handlerType in handlerTypes)
             {
                 var handlers = assemblies
-                    .SelectMany(assembly => typeof(IHandler<>)
+                    .SelectMany(assembly => typeof(IHandler<>) //TODO: Fix registration
                     .GetAllImplementationOfGenericInterface(assembly));
-                foreach (var handler in handlers)
+                foreach(var handler in handlers)
                 {
                     services.AddTransient(handlerType, handler);
                 }

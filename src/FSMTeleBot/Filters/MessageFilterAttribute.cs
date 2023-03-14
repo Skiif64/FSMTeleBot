@@ -11,7 +11,7 @@ public class MessageFilterAttribute : FilterAttribute
     public string? ContainsCommand { get; init; }
     public string? Contains { get; init; }
     public string? Regexp { get; init; }
-    public ChatState? RequiredState { get; init; }
+    public string? RequiredState { get; init; }
     public override bool IsMatch(object argument, IServiceProvider provider)
     {
         if (argument is not Message message)
@@ -35,7 +35,7 @@ public class MessageFilterAttribute : FilterAttribute
         if(RequiredState is not null)
         {
             var context = (IChatContext)provider.GetService(typeof(IChatContext))!;
-            if (!context.CurrentState.Equals(RequiredState))
+            if (!context.CurrentState.Equals(new ChatState(RequiredState)))
                 return false;
         }
 

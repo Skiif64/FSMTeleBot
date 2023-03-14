@@ -7,21 +7,11 @@ using Moq;
 using Telegram.Bot.Types;
 
 namespace FSMTeleBot.Tests.Filters;
-public class FakeState1 : IChatState
-{
-    public string Name => "Fake1";
-}
-
-public class FakeState2 : IChatState
-{
-    public string Name => "Fake2";
-}
-
 public class MessageFilterTests
 {
     private readonly IServiceProvider _serviceProvider;
-    private readonly ChatState _chatState1;
-    private readonly ChatState _chatState2;
+    private readonly IChatState _chatState1;
+    private readonly IChatState _chatState2;
     private readonly Mock<IChatContext> _chatContextMock;
 
     private readonly MessageFilterAttribute _filterWithContains;
@@ -42,7 +32,7 @@ public class MessageFilterTests
         _filterWithContains = new MessageFilterAttribute { Contains = "message" };
         _filterWithContainsCommand = new MessageFilterAttribute { ContainsCommand = "start" };
         _filterWithRegexp = new MessageFilterAttribute { Regexp = @"^[0-9]+" };
-        _filterWithChatStateRequired = new MessageFilterAttribute { RequiredState = _chatState1 };
+        _filterWithChatStateRequired = new MessageFilterAttribute { RequiredState = _chatState1.Name };
     }
 
     [SetUp]

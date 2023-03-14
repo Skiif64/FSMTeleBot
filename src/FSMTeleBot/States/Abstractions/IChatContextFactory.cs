@@ -2,5 +2,5 @@
 
 public interface IChatContextFactory
 {
-    Task<ChatContext> GetContextAsync(long chatId, long userId, CancellationToken cancellationToken = default);
+    Task<ChatContext> GetContextAsync(CancellationToken cancellationToken = default);
 }

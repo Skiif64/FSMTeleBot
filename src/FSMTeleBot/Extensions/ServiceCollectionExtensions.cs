@@ -18,14 +18,16 @@ public static class ServiceCollectionExtensions
         configuration.OptionsRegistration?.Invoke(services);
         services.AddHandlers(configuration);
         services.AddRequiredServices(configuration);
+        services.AddUpdateDescriptors(configuration);
         return services;
     }
 
-    private static IServiceCollection AddHandlers(this IServiceCollection services, BotBuilderConfiguration configuration)
-    {
-        services.AddHandlers(configuration.Assemblies);
-        return services;
-    }
+    private static IServiceCollection AddHandlers(this IServiceCollection services, BotBuilderConfiguration configuration) 
+        =>services.AddHandlers(configuration.Assemblies);
+    private static IServiceCollection AddUpdateDescriptors(this IServiceCollection services, BotBuilderConfiguration configuration)
+        => services.AddUpdateDescriptors(configuration.Assemblies);
+
+
 
     private static IServiceCollection AddRequiredServices(this IServiceCollection services, BotBuilderConfiguration configuration)
     {
@@ -35,8 +37,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped(typeof(IChatStateStorage), configuration.StateStorageImplementationType);
         services.AddScoped(typeof(IChatMemberService), configuration.MemberServiceImplementationType);
         services.AddSingleton(typeof(IUpdateHandler), configuration.UpdateHandlerImplementationType);
-        services.AddSingleton<IBotMediator, BotMediator>(); //TODO: Singleton???
-        services.AddSingleton<IChatContextFactory, ChatContextFactory>();        
+        services.AddSingleton<IBotMediator, BotMediator>(); //TODO: Singleton???             
         services.AddHostedService<TelegramBot>();
         return services;
     }

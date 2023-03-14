@@ -1,4 +1,7 @@
 ﻿using FSMTeleBot.Handlers.Abstractions;
+using FSMTeleBot.Internal.UpdateDescriptors;
+using FSMTeleBot.States;
+using FSMTeleBot.States.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Telegram.Bot.Types;
@@ -25,6 +28,13 @@ namespace FSMTeleBot.Internal.DependencyInjectionExtensions
             }
 
             return services;
-        }        
+        }  
+        
+        public static IServiceCollection AddUpdateDescriptors(this IServiceCollection services, IEnumerable<Assembly> assemblies)
+        {
+            services.AddTransient(typeof(IUpdateDescriptor<Message>), typeof(MessageDescriptor)); //TODO: normal registration
+            services.AddTransient(typeof(IChatContextFactory), typeof(ChatContextFactory<Message>)); //TODO: move away
+            return services;
+        }
     }
 }

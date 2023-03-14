@@ -35,7 +35,8 @@ public class MessageFilterAttribute : FilterAttribute
         if(RequiredState is not null)
         {
             var context = (IChatContext)provider.GetService(typeof(IChatContext))!;
-            if (!context.CurrentState.Equals(new ChatState(RequiredState)))
+            var currentState = context.CurrentState;
+            if (currentState is null || !currentState.Equals(new ChatState(RequiredState)))
                 return false;
         }
 

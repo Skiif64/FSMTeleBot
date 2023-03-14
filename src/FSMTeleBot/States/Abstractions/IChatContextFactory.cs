@@ -1,6 +1,6 @@
 ﻿namespace FSMTeleBot.States.Abstractions;
 
-public interface IChatContextFactory
+public interface IChatContextFactory<TMessage>
 {
-    Task<ChatContext> GetContextAsync(CancellationToken cancellationToken = default);
+    Task<IChatContext> GetContextAsync(TMessage message, CancellationToken cancellationToken = default);
 }

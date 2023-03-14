@@ -12,6 +12,7 @@ public class MessageFilterTests
     private readonly IServiceProvider _serviceProvider;
     private readonly IChatState _chatState1;
     private readonly IChatState _chatState2;
+    private readonly Mock<IChatContextFactory<Message>> _factoryMock;
     private readonly Mock<IChatContext> _chatContextMock;
 
     private readonly MessageFilterAttribute _filterWithContains;
@@ -21,6 +22,7 @@ public class MessageFilterTests
     private readonly MessageFilterAttribute _filterWithoutArgs;
     public MessageFilterTests()
     {
+        _factoryMock = new Mock<IChatContextFactory<Message>>();
         _chatContextMock = new Mock<IChatContext>();
         _chatState1 = new ChatState("Fake1");
         _chatState2 = new ChatState("Fake2");
@@ -28,6 +30,12 @@ public class MessageFilterTests
         serviceProviderMock
             .Setup(x => x.GetService(typeof(IChatContext)))
             .Returns(_chatContextMock.Object);
+        serviceProviderMock
+            .Setup(x => x.GetService(typeof(IChatContextFactory<Message>)))
+            .Returns(_factoryMock.Object);
+        _factoryMock.Setup(x => x.GetContextAsync(It.IsAny<Message>(), default))
+            .Returns(Task.FromResult(_chatContextMock.Object));
+            
         _serviceProvider = serviceProviderMock.Object;
         
         _filterWithContains = new MessageFilterAttribute { Contains = "message" };

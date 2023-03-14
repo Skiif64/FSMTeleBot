@@ -26,14 +26,14 @@ namespace FSMTeleBot.Internal.DependencyInjectionExtensions
                     services.AddTransient(handlerType, handler);
                 }
             }
-
+            
             return services;
         }  
         
         public static IServiceCollection AddUpdateDescriptors(this IServiceCollection services, IEnumerable<Assembly> assemblies)
         {
             services.AddTransient(typeof(IUpdateDescriptor<Message>), typeof(MessageDescriptor)); //TODO: normal registration
-            services.AddTransient(typeof(IChatContextFactory), typeof(ChatContextFactory<Message>)); //TODO: move away
+            services.AddTransient(typeof(IChatContextFactory<Message>), typeof(ChatContextFactory<Message>)); //TODO: move away
             return services;
         }
     }

@@ -8,7 +8,7 @@ using Telegram.Bot.Types;
 namespace FSMTeleBot.Internal.DependencyInjectionExtensions
 {
     internal static class DIRegistrationExtensions
-    {        
+    {
         public static IServiceCollection AddHandlers(this IServiceCollection services, IEnumerable<Assembly> assemblies)
         {
             var handlerTypes = new[]
@@ -20,18 +20,22 @@ namespace FSMTeleBot.Internal.DependencyInjectionExtensions
                 var handlers = assemblies
                     .SelectMany(assembly => typeof(IHandler<>) //TODO: Fix registration
                     .GetAllImplementationOfGenericInterface(assembly));
-                foreach(var handler in handlers)
+                foreach (var handler in handlers)
                 {
                     services.AddTransient(handlerType, handler);
                 }
             }
-            
+
             return services;
-        }  
-        
+        }
+
         public static IServiceCollection AddUpdateDescriptors(this IServiceCollection services, IEnumerable<Assembly> assemblies)
         {
-            services.AddTransient(typeof(IUpdateDescriptor), typeof(MessageDescriptor)); //TODO: normal registration            
+            var descriptors = typeof(IUpdateDescriptor).GetConcreteImplementationOfInterface(assemblies);
+            foreach (var descriptor in descriptors)
+            {
+                services.AddTransient(typeof(IUpdateDescriptor), descriptor);         
+            }
             return services;
         }
     }

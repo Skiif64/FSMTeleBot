@@ -3,25 +3,22 @@ using Telegram.Bot;
 
 namespace FSMTeleBot.Handlers.Abstractions;
 
-public class HandlerBase<TMessage> : IHandler<TMessage>
+public class HandlerBase<TMessage> : IHandler<TMessage> //TODO: implement
 {
-    private readonly IChatContextFactory _contextFactory;    
+    private readonly IChatContextFactory _factory;
+    private IChatContext _context;
     protected ITelegramBotClient Client { get; }
-    protected IChatContext Context { get; private set; } = null!;
+    //protected IChatContext Context => _context ??=
+        //_factory.GetContextAsync().Result; //TODO: refactor
 
     public HandlerBase(ITelegramBotClient client, IChatContextFactory contextFactory)
     {
         Client = client;
-        _contextFactory = contextFactory;            
+        _factory = contextFactory;            
     }
 
     public Task HandleAsync(TMessage data, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
-    }
-
-    internal async Task InitAsync(TMessage data, CancellationToken cancellationToken = default)
-    {
-        Context = await _contextFactory.GetContextAsync(data, cancellationToken);
     }
 }

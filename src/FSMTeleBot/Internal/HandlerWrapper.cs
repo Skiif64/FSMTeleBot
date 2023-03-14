@@ -30,20 +30,18 @@ internal class HandlerWrapper<TMessage> : HandlerWrapper
     }
 
     public override Task HandleAsync(object argument, IServiceProvider provider, CancellationToken cancellationToken = default)
-    {
-        if (argument is not TMessage message)
+    {        
+        if(argument is not TMessage message)
             throw new ArgumentException(nameof(argument));
 
         return HandleAsync(message, provider, cancellationToken);
     }
-
-    public async Task HandleAsync(TMessage message, IServiceProvider provider, CancellationToken cancellationToken = default)
-    {
-        if (_handler is HandlerBase<TMessage> handlerBase)
-            await handlerBase.InitAsync(message, cancellationToken);
-        await _handler.HandleAsync(message, cancellationToken);
+    
+    public Task HandleAsync(TMessage message, IServiceProvider provider, CancellationToken cancellationToken = default)
+    {        
+        return _handler.HandleAsync(message, cancellationToken);
     }
-
+    
     public override bool CanHandle(object argument)
     {
         if (argument is not TMessage message)

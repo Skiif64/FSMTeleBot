@@ -18,6 +18,7 @@ public class MessageFilterTests
     private readonly MessageFilterAttribute _filterWithContainsCommand;
     private readonly MessageFilterAttribute _filterWithRegexp;
     private readonly MessageFilterAttribute _filterWithChatStateRequired;
+    private readonly MessageFilterAttribute _filterWithoutArgs;
     public MessageFilterTests()
     {
         _chatContextMock = new Mock<IChatContext>();
@@ -33,12 +34,33 @@ public class MessageFilterTests
         _filterWithContainsCommand = new MessageFilterAttribute { ContainsCommand = "start" };
         _filterWithRegexp = new MessageFilterAttribute { Regexp = @"^[0-9]+" };
         _filterWithChatStateRequired = new MessageFilterAttribute { RequiredState = _chatState1.Name };
+        _filterWithoutArgs = new MessageFilterAttribute();
     }
 
     [SetUp]
     public void Setup()
     {
 
+    }
+
+    public void WhenFilterWithoutArgsIsMatch_TextMessage_ThenShouldReturnTrue()
+    {
+        var message = new Message
+        {
+            Text = "message",
+            From = new User
+            {
+                Id = 1
+            },
+            Chat = new Chat
+            {
+                Id = 1
+            }
+        };
+
+        var result = _filterWithoutArgs.IsMatch(message, _serviceProvider);
+
+        Assert.IsTrue(result);
     }
 
     [Test]

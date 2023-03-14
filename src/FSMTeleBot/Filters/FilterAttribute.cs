@@ -20,7 +20,7 @@ public abstract class FilterAttribute : Attribute
         if (Allowed is not null)
         {
             var memberService = (IChatMemberService)provider.GetService(typeof(IChatMemberService))!;
-            if (memberService.GetStatus(chatId, userId).Result > Allowed) //TODO: refactor this
+            if (memberService.GetStatusAsync(chatId, userId).Result > Allowed) //TODO: refactor this
                 return false;
         }
 

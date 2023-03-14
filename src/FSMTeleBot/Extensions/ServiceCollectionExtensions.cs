@@ -27,7 +27,9 @@ public static class ServiceCollectionExtensions
 
     private static IServiceCollection AddRequiredServices(this IServiceCollection services, BotBuilderConfiguration configuration)
     {
-        services.AddTransient(typeof(ITelegramBotClient), configuration.TelegramBotClientImplementationType); //TODO: can`t resolve dependency
+        services.AddTransient(typeof(ITelegramBotClient), sp => new TelegramBotClient(
+            sp.GetRequiredService<TelegramBotOptions>()
+            .BotOptions.Token)); //TODO: implement custom telegram client, maybe a factory
         services.AddScoped(typeof(IChatStateStorage), configuration.StateStorageImplementationType);
         services.AddScoped(typeof(IChatMemberService), configuration.MemberServiceImplementationType);
         services.AddSingleton(typeof(IUpdateHandler), configuration.UpdateHandlerImplementationType);

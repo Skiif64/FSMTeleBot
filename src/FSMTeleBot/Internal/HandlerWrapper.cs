@@ -7,7 +7,7 @@ namespace FSMTeleBot.Internal;
 
 internal abstract class HandlerWrapper
 {
-    public abstract Task Handle(object argument, IServiceProvider provider, CancellationToken cancellationToken = default);
+    public abstract Task HandleAsync(object argument, IServiceProvider provider, CancellationToken cancellationToken = default);
     public abstract bool CanHandle(object argument);
 }
 internal class HandlerWrapper<TMessage> : HandlerWrapper
@@ -29,15 +29,15 @@ internal class HandlerWrapper<TMessage> : HandlerWrapper
         _serviceProvider = serviceProvider;
     }
 
-    public override Task Handle(object argument, IServiceProvider provider, CancellationToken cancellationToken = default)
+    public override Task HandleAsync(object argument, IServiceProvider provider, CancellationToken cancellationToken = default)
     {        
         if(argument is not TMessage message)
             throw new ArgumentException(nameof(argument));
 
-        return Handle(message, provider, cancellationToken);
+        return HandleAsync(message, provider, cancellationToken);
     }
     
-    public Task Handle(TMessage message, IServiceProvider provider, CancellationToken cancellationToken = default)
+    public Task HandleAsync(TMessage message, IServiceProvider provider, CancellationToken cancellationToken = default)
     {        
         return _handler.HandleAsync(message, cancellationToken);
     }

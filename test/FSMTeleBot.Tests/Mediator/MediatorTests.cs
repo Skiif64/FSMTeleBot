@@ -68,7 +68,7 @@ public class MediatorTests
             }
         };
 
-        Assert.DoesNotThrowAsync(async () => await _mediator.Send(message));
+        Assert.DoesNotThrowAsync(async () => await _mediator.SendAsync(message));
         _startHandlerMock.Verify(x => x.HandleAsync(It.IsAny<Message>(), default), Times.Once);
         _cancelHandlerMock.Verify(x => x.HandleAsync(It.IsAny<Message>(), default), Times.Never);
         _emptyHandlerMock.Verify(x => x.HandleAsync(It.IsAny<Message>(), default), Times.Never);
@@ -90,7 +90,7 @@ public class MediatorTests
             }
         };
 
-        Assert.DoesNotThrowAsync(async () => await _mediator.Send(message));
+        Assert.DoesNotThrowAsync(async () => await _mediator.SendAsync(message));
         _startHandlerMock.Verify(x => x.HandleAsync(It.IsAny<Message>(), default), Times.Never);
         _cancelHandlerMock.Verify(x => x.HandleAsync(It.IsAny<Message>(), default), Times.Once);
         _emptyHandlerMock.Verify(x => x.HandleAsync(It.IsAny<Message>(), default), Times.Never);
@@ -111,7 +111,7 @@ public class MediatorTests
             }
         };
 
-        Assert.DoesNotThrowAsync(async () => await _mediator.Send(message));
+        Assert.DoesNotThrowAsync(async () => await _mediator.SendAsync(message));
         _startHandlerMock.Verify(x => x.HandleAsync(It.IsAny<Message>(), default), Times.Never);
         _cancelHandlerMock.Verify(x => x.HandleAsync(It.IsAny<Message>(), default), Times.Never);
         _emptyHandlerMock.Verify(x => x.HandleAsync(It.IsAny<Message>(), default), Times.Once);

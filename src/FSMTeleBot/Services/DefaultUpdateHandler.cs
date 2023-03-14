@@ -24,7 +24,7 @@ internal class DefaultUpdateHandler : IUpdateHandler
     {
         var action = update.Type switch
         {
-            UpdateType.Message => _mediator.Send(update.Message, cancellationToken),
+            UpdateType.Message => _mediator.SendAsync(update.Message, cancellationToken),
             _ => Task.CompletedTask
         };
         await action;

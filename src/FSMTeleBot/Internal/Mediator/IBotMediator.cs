@@ -11,5 +11,5 @@ internal interface IBotMediator
     /// <typeparam name="T">Telegram update type</typeparam>
     /// <param name="argument">Telegram update message</param>    
     /// <returns></returns>
-    Task Send<T>(T argument, CancellationToken cancellationToken = default);
+    Task SendAsync<T>(T argument, CancellationToken cancellationToken = default);
 }

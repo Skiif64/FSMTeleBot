@@ -31,7 +31,7 @@ public class InMemoryStateStorage : IChatStateStorage
     }
     private static readonly IChatState _initialState = new ChatState();
     private readonly ConcurrentDictionary<ChatUserId, IChatState> _storage = new();
-    public Task<IChatState> GetOrInit(long chatId, long userId, CancellationToken cancellationToken = default)
+    public Task<IChatState> GetOrInitAsync(long chatId, long userId, CancellationToken cancellationToken = default)
     {
         var key = new ChatUserId(chatId, userId);
         var newState = _storage.GetOrAdd(key, _initialState);

@@ -14,7 +14,7 @@ public class ChatMemberService : IChatMemberService
     }
 
     //TODO: Shorten name?
-    public virtual async Task<ChatMemberStatus> GetStatus(long chatId, long userId, CancellationToken cancellationToken = default)
+    public virtual async Task<ChatMemberStatus> GetStatusAsync(long chatId, long userId, CancellationToken cancellationToken = default)
     {
         var member = await _client.GetChatMemberAsync(chatId, userId, cancellationToken);
         return member.Status;

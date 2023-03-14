@@ -50,13 +50,13 @@ public class FilterTests
     {
         _chatMemberServiceMock.Reset();
         _chatMemberServiceMock
-            .Setup(x => x.GetStatus(It.IsAny<long>(), It.IsAny<long>(), default))
+            .Setup(x => x.GetStatusAsync(It.IsAny<long>(), It.IsAny<long>(), default))
             .Returns(Task.FromResult(ChatMemberStatus.Member));
 
         var result = _filterWithChatMember.IsMatch(_message, _serviceProvider);
 
         Assert.IsTrue(result);
-        _chatMemberServiceMock.Verify(x => x.GetStatus(It.IsAny<long>(), It.IsAny<long>(), default), Times.Once);
+        _chatMemberServiceMock.Verify(x => x.GetStatusAsync(It.IsAny<long>(), It.IsAny<long>(), default), Times.Once);
     }
 
     [Test]
@@ -64,13 +64,13 @@ public class FilterTests
     {
         _chatMemberServiceMock.Reset();
         _chatMemberServiceMock
-            .Setup(x => x.GetStatus(It.IsAny<long>(), It.IsAny<long>(), default))
+            .Setup(x => x.GetStatusAsync(It.IsAny<long>(), It.IsAny<long>(), default))
             .Returns(Task.FromResult(ChatMemberStatus.Administrator));
 
         var result = _filterWithChatMember.IsMatch(_message, _serviceProvider);
 
         Assert.IsTrue(result);
-        _chatMemberServiceMock.Verify(x => x.GetStatus(It.IsAny<long>(), It.IsAny<long>(), default), Times.Once);
+        _chatMemberServiceMock.Verify(x => x.GetStatusAsync(It.IsAny<long>(), It.IsAny<long>(), default), Times.Once);
     }
 
     [Test]
@@ -78,13 +78,13 @@ public class FilterTests
     {
         _chatMemberServiceMock.Reset();
         _chatMemberServiceMock
-            .Setup(x => x.GetStatus(It.IsAny<long>(), It.IsAny<long>(), default))
+            .Setup(x => x.GetStatusAsync(It.IsAny<long>(), It.IsAny<long>(), default))
             .Returns(Task.FromResult(ChatMemberStatus.Kicked));
 
         var result = _filterWithChatMember.IsMatch(_message, _serviceProvider);
 
         Assert.IsFalse(result);
-        _chatMemberServiceMock.Verify(x => x.GetStatus(It.IsAny<long>(), It.IsAny<long>(), default), Times.Once);
+        _chatMemberServiceMock.Verify(x => x.GetStatusAsync(It.IsAny<long>(), It.IsAny<long>(), default), Times.Once);
     }
 
     [Test]
@@ -92,12 +92,12 @@ public class FilterTests
     {
         _chatMemberServiceMock.Reset();
         _chatMemberServiceMock
-            .Setup(x => x.GetStatus(It.IsAny<long>(), It.IsAny<long>(), default))
+            .Setup(x => x.GetStatusAsync(It.IsAny<long>(), It.IsAny<long>(), default))
             .Returns(Task.FromResult(ChatMemberStatus.Kicked));
 
         var result = _filterWithoutStrict.IsMatch(_message, _serviceProvider);
 
         Assert.IsTrue(result);
-        _chatMemberServiceMock.Verify(x => x.GetStatus(It.IsAny<long>(), It.IsAny<long>(), default), Times.Never);
+        _chatMemberServiceMock.Verify(x => x.GetStatusAsync(It.IsAny<long>(), It.IsAny<long>(), default), Times.Never);
     }
 }

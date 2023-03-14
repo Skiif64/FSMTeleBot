@@ -12,7 +12,7 @@ public class BotMediator : IBotMediator
         _serviceProvider = serviceProvider;
     }
    
-    public async Task Send<T>(T argument, CancellationToken cancellationToken = default)
+    public async Task SendAsync<T>(T argument, CancellationToken cancellationToken = default)
     {
         if (argument is null)
             throw new NullReferenceException(nameof(argument));
@@ -33,6 +33,6 @@ public class BotMediator : IBotMediator
         var wrapper = wrappers.FirstOrDefault(w => w.CanHandle(argument));
         if(wrapper is null)
             return; //TODO: Exception?
-        await wrapper.Handle(argument, _serviceProvider, cancellationToken);
+        await wrapper.HandleAsync(argument, _serviceProvider, cancellationToken);
     }
 }

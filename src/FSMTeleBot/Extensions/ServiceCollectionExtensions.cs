@@ -37,7 +37,9 @@ public static class ServiceCollectionExtensions
         services.AddScoped(typeof(IChatStateStorage), configuration.StateStorageImplementationType);
         services.AddScoped(typeof(IChatMemberService), configuration.MemberServiceImplementationType);
         services.AddSingleton(typeof(IUpdateHandler), configuration.UpdateHandlerImplementationType);
-        services.AddSingleton<IBotMediator, BotMediator>(); //TODO: Singleton???             
+        services.AddSingleton<IBotMediator, BotMediator>(); //TODO: Singleton???
+        services.AddTransient<IChatContext>(sp => sp
+        .GetRequiredService<IChatContextFactory>().GetContextAsync(default).Result);
         services.AddHostedService<TelegramBot>();
         return services;
     }

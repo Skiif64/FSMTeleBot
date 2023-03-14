@@ -24,6 +24,21 @@ internal static class TypeExtensions
 
         return type.IsAssignableFrom(implementingType.GetGenericTypeDefinition());
     }
+    public static Type[] GetConcreteImplementationOfInterface(this Type interfaceType, Assembly assembly)
+        => GetConcreteImplementationOfInterface(interfaceType, new[] { assembly });
+
+    public static Type[] GetConcreteImplementationOfInterface(this Type interfaceType, IEnumerable<Assembly> assemblies)
+    {
+        if (!interfaceType.IsInterface)
+            throw new ArgumentException(nameof(interfaceType));
+
+        return assemblies
+            .SelectMany(assembly => assembly.DefinedTypes)
+            .Where(type => type.IsConcrete())
+            .Where(type => type.IsAssignableTo(interfaceType))
+            .ToArray()
+            ;
+    }
 
     public static Type[] GetAllImplementationOfGenericInterface(this Type baseType, Assembly assembly)
     {

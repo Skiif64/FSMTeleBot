@@ -31,7 +31,7 @@ namespace FSMTeleBot.Internal.DependencyInjectionExtensions
 
         public static IServiceCollection AddUpdateDescriptors(this IServiceCollection services, IEnumerable<Assembly> assemblies)
         {
-            var descriptors = typeof(IUpdateDescriptor).GetConcreteImplementationOfInterface(assemblies);
+            var descriptors = typeof(IUpdateDescriptor).GetConcreteImplementationOfInterface(typeof(IUpdateDescriptor).Assembly);
             foreach (var descriptor in descriptors)
             {
                 services.AddTransient(typeof(IUpdateDescriptor), descriptor);         

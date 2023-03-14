@@ -3,7 +3,7 @@ using Telegram.Bot;
 
 namespace FSMTeleBot.Handlers.Abstractions;
 
-public class HandlerBase<TMessage> : IHandler<TMessage> //TODO: implement
+public abstract class HandlerBase<TMessage> : IHandler<TMessage> //TODO: implement
 {
     private readonly IChatContextFactory _factory;
     private IChatContext _context;
@@ -17,8 +17,5 @@ public class HandlerBase<TMessage> : IHandler<TMessage> //TODO: implement
         _factory = contextFactory;            
     }
 
-    public Task HandleAsync(TMessage data, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
-    }
+    public abstract Task HandleAsync(TMessage data, CancellationToken cancellationToken = default);
 }

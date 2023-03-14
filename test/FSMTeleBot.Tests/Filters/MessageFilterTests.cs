@@ -50,7 +50,7 @@ public class MessageFilterTests
     {
 
     }
-
+    [Test]
     public void WhenFilterWithoutArgsIsMatch_TextMessage_ThenShouldReturnTrue()
     {
         var message = new Message

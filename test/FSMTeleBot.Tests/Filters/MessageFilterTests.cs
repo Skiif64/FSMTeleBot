@@ -1,5 +1,6 @@
 ﻿using FSMTeleBot.Filters;
 using FSMTeleBot.Handlers.Abstractions;
+using FSMTeleBot.States;
 using FSMTeleBot.States.Abstractions;
 using FSMTeleBot.Tests.FSM;
 using Moq;
@@ -19,8 +20,8 @@ public class FakeState2 : IChatState
 public class MessageFilterTests
 {
     private readonly IServiceProvider _serviceProvider;
-    private readonly IChatState _chatState1;
-    private readonly IChatState _chatState2;
+    private readonly ChatState _chatState1;
+    private readonly ChatState _chatState2;
     private readonly Mock<IChatContext> _chatContextMock;
 
     private readonly MessageFilterAttribute _filterWithContains;
@@ -30,8 +31,8 @@ public class MessageFilterTests
     public MessageFilterTests()
     {
         _chatContextMock = new Mock<IChatContext>();
-        _chatState1 = new FakeState1();
-        _chatState2 = new FakeState2();
+        _chatState1 = new ChatState("Fake1");
+        _chatState2 = new ChatState("Fake2");
         var serviceProviderMock = new Mock<IServiceProvider>();
         serviceProviderMock
             .Setup(x => x.GetService(typeof(IChatContext)))

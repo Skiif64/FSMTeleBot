@@ -21,7 +21,7 @@ public readonly struct ChatState : IChatState
             if (obj is not string name)
                 return false;
 
-            return Name == name;
+            return Name.Equals(name);
         }
 
         return Name.Equals(other.Name);

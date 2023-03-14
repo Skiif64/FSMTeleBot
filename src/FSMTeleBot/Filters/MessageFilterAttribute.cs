@@ -1,4 +1,5 @@
 ﻿using FSMTeleBot.Abstractions;
+using FSMTeleBot.States;
 using FSMTeleBot.States.Abstractions;
 using System.Text.RegularExpressions;
 using Telegram.Bot.Types;
@@ -10,7 +11,7 @@ public class MessageFilterAttribute : FilterAttribute
     public string? ContainsCommand { get; init; }
     public string? Contains { get; init; }
     public string? Regexp { get; init; }
-    public IChatState? RequiredState { get; init; }
+    public ChatState? RequiredState { get; init; }
     public override bool IsMatch(object argument, IServiceProvider provider)
     {
         if (argument is not Message message)

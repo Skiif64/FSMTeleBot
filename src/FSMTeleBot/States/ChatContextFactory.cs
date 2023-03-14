@@ -4,20 +4,23 @@ using FSMTeleBot.States.Abstractions;
 
 namespace FSMTeleBot.States;
 
-internal class ChatContextFactory<TMessage> : IChatContextFactory<TMessage> //Move to internal folder
+internal class ChatContextFactory : IChatContextFactory //Move to internal folder
 {
     private readonly IChatStateStorage _storage;
-    private readonly IUpdateDescriptor<TMessage> _descriptor;    
-    public ChatContextFactory(IChatStateStorage storage, IUpdateDescriptor<TMessage> descriptor)
+    private readonly IEnumerable<IUpdateDescriptor> _descriptors;    
+    public ChatContextFactory(IChatStateStorage storage, IEnumerable<IUpdateDescriptor> descriptors)
     {
         _storage = storage;        
-        _descriptor = descriptor;
+        _descriptors = descriptors;
     }
 
-    public async Task<IChatContext> GetContextAsync(TMessage message, CancellationToken cancellationToken = default)
+    public async Task<IChatContext> GetContextAsync<TMessage>(TMessage message, CancellationToken cancellationToken = default)
     {
-        var chatId = _descriptor.GetChatId(message);
-        var userId = _descriptor.GetUserId(message);
+        var descriptor = _descriptors.FirstOrDefault(d => d.Type == typeof(TMessage));
+        if (descriptor is null)
+            throw new Exception(nameof(descriptor)); //TODO: normal exception
+        var chatId = descriptor.GetChatId(message);
+        var userId = descriptor.GetUserId(message);
         var currentState = await _storage.GetOrInitAsync(chatId, userId, cancellationToken);
         var context = new ChatContext(chatId, userId, _storage, currentState);
         return context;

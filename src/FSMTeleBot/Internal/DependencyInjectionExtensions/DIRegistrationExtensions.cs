@@ -32,8 +32,8 @@ namespace FSMTeleBot.Internal.DependencyInjectionExtensions
         
         public static IServiceCollection AddUpdateDescriptors(this IServiceCollection services, IEnumerable<Assembly> assemblies)
         {
-            services.AddTransient(typeof(IUpdateDescriptor<Message>), typeof(MessageDescriptor)); //TODO: normal registration
-            services.AddTransient(typeof(IChatContextFactory<Message>), typeof(ChatContextFactory<Message>)); //TODO: move away
+            services.AddTransient(typeof(IUpdateDescriptor), typeof(MessageDescriptor)); //TODO: normal registration
+            services.AddTransient(typeof(IChatContextFactory), typeof(ChatContextFactory)); //TODO: move away
             return services;
         }
     }

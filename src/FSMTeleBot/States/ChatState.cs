@@ -17,7 +17,12 @@ public readonly struct ChatState : IChatState
     public override bool Equals(object? obj)
     {
         if (obj is not ChatState other)
-            return false;
+        {
+            if (obj is not string name)
+                return false;
+
+            return Name == name;
+        }
 
         return Name.Equals(other.Name);
     }

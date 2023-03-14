@@ -6,14 +6,14 @@ namespace FSMTeleBot.States;
 public class ChatContext : IChatContext
 {
     private readonly IChatStateStorage _storage;
-    private readonly long _chatId;
-    private readonly long _userId;
+    public long UserId { get; }
+    public long ChatId { get; }
     public IChatState CurrentState { get; private set; }
 
     internal ChatContext(long chatId, long userId, IChatStateStorage storage, IChatState currentState)
     {
-        _chatId = chatId;
-        _userId = userId;
+        ChatId = chatId;
+        UserId = userId;
         _storage = storage;
         CurrentState = currentState;
     }
@@ -22,7 +22,7 @@ public class ChatContext : IChatContext
     {
         CurrentState = state;
         await _storage
-            .UpdateAsync(_chatId, _userId, CurrentState, cancellationToken)
+            .UpdateAsync(ChatId, UserId, CurrentState, cancellationToken)
             .ConfigureAwait(false);
     }
 
@@ -30,7 +30,7 @@ public class ChatContext : IChatContext
     {
         CurrentState = null; //TODO: Change this
         await _storage
-            .UpdateAsync(_chatId, _userId, null, cancellationToken)
+            .UpdateAsync(ChatId, UserId, null, cancellationToken)
             .ConfigureAwait(false);
     }
 }

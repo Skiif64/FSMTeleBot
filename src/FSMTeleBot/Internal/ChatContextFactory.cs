@@ -1,11 +1,11 @@
 ﻿using FSMTeleBot.Abstractions;
-using FSMTeleBot.Internal.UpdateDescriptors;
+using FSMTeleBot.Handlers.Abstractions;
 using FSMTeleBot.States;
 using FSMTeleBot.States.Abstractions;
 
 namespace FSMTeleBot.Internal;
 
-internal class ChatContextFactory : IChatContextFactory //Move to internal folder
+internal class ChatContextFactory : IChatContextFactory
 {
     private readonly IChatStateStorage _storage;
     private readonly IEnumerable<IUpdateDescriptor> _descriptors;

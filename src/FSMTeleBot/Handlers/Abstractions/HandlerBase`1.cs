@@ -14,4 +14,10 @@ public abstract class HandlerBase<TMessage> : IHandler<TMessage>
     }
 
     public abstract Task HandleAsync(TMessage data, CancellationToken cancellationToken = default);
+    internal async Task HandleInternalAsync(TMessage data, CancellationToken cancellationToken = default)
+    {
+        //TODO: implement
+        await HandleAsync(data, cancellationToken)
+            .ConfigureAwait(false);
+    }
 }

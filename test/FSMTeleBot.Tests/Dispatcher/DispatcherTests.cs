@@ -5,17 +5,17 @@ using Moq;
 using System.ComponentModel;
 using Telegram.Bot.Types;
 
-namespace FSMTeleBot.Tests.Mediator;
+namespace FSMTeleBot.Tests.Dispatcher;
 
-public class MediatorTests
+public class DispatcherTests
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly IBotDispatcher _dispatcher;
     private readonly Mock<IHandler<Message>> _startHandlerMock;
     private readonly Mock<IHandler<Message>> _cancelHandlerMock;
     private readonly Mock<IHandler<Message>> _emptyHandlerMock;
-    
-    public MediatorTests()
+
+    public DispatcherTests()
     {
         _startHandlerMock = new Mock<IHandler<Message>>();
         TypeDescriptor.AddAttributes(_startHandlerMock.Object, new MessageFilterAttribute { Contains = "start" });
@@ -50,7 +50,7 @@ public class MediatorTests
         _emptyHandlerMock
            .Setup(x => x.HandleAsync(It.IsAny<Message>(), default))
            .Returns(Task.CompletedTask);
-    }    
+    }
 
     [Test]
     public void WhenSend_StartMessage_ThenHandleStartHandler()

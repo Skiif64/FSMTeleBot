@@ -1,8 +1,8 @@
 ﻿using Telegram.Bot.Types.Enums;
 
-namespace FSMTeleBot.Internal.UpdateDescriptors;
+namespace FSMTeleBot.Handlers.Abstractions;
 
-internal interface IUpdateDescriptor
+public interface IUpdateDescriptor
 {
     Type Type { get; }
     long GetChatId(object message);

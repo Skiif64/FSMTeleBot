@@ -6,7 +6,7 @@ namespace FSMTeleBot.Internal.Dispatcher;
 public class BotDispatcher : IBotDispatcher
 {
     private readonly IServiceProvider _serviceProvider;
-    private readonly ConcurrentDictionary<Type, List<HandlerWrapper>> _handlers = new();
+    private readonly ConcurrentDictionary<Type, List<HandlerDescriptor>> _handlers = new();
     public BotDispatcher(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
@@ -21,7 +21,7 @@ public class BotDispatcher : IBotDispatcher
             t =>
             {
                 var services = (IEnumerable<IHandler<T>>)_serviceProvider.GetService(typeof(IEnumerable<IHandler<T>>))!;
-                var list = new List<HandlerWrapper>();
+                var list = new List<HandlerDescriptor>();
                 if (!services.Any())
                     return list;
                 foreach (var service in services)

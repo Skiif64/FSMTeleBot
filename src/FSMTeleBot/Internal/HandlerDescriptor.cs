@@ -1,23 +1,23 @@
 ﻿using FSMTeleBot.Filters;
 using FSMTeleBot.Handlers.Abstractions;
 using System.ComponentModel;
-using System.Reflection;
+
 
 namespace FSMTeleBot.Internal;
 
-internal abstract class HandlerWrapper
+internal abstract class HandlerDescriptor
 {
     public abstract Task HandleAsync(object argument, IServiceProvider provider, CancellationToken cancellationToken = default);
     public abstract bool CanHandle(object argument);
 }
-internal class HandlerWrapper<TMessage> : HandlerWrapper
+internal class HandlerDescriptor<TMessage> : HandlerDescriptor
 {
     private readonly Type _handlerType;
     private readonly IHandler<TMessage> _handler;
     private readonly FilterAttribute? _filter;
     private readonly IServiceProvider _serviceProvider;
 
-    public HandlerWrapper(IHandler<TMessage> handler, IServiceProvider serviceProvider)
+    public HandlerDescriptor(IHandler<TMessage> handler, IServiceProvider serviceProvider)
     {
         //TODO: Validation
         _handler = handler;

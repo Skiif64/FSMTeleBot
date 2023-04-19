@@ -6,7 +6,7 @@ namespace FSMTeleBot.Internal.Dispatcher;
 public class BotDispatcher : IBotDispatcher
 {
     private readonly IServiceProvider _serviceProvider;
-    private readonly ConcurrentDictionary<Type, List<HandlerDescriptor>> _handlers = new();
+    private readonly ConcurrentDictionary<Type, List<HandlerDescriptor>> _descriptors = new();
     public BotDispatcher(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
@@ -17,22 +17,22 @@ public class BotDispatcher : IBotDispatcher
         if (argument is null)
             throw new NullReferenceException(nameof(argument));
 
-        var wrappers = _handlers.GetOrAdd(typeof(T),
+        var descriptors = _descriptors.GetOrAdd(typeof(T),
             t =>
             {
-                var services = (IEnumerable<IHandler<T>>)_serviceProvider.GetService(typeof(IEnumerable<IHandler<T>>))!;
+                var handlers = (IEnumerable<IHandler<T>>)_serviceProvider.GetService(typeof(IEnumerable<IHandler<T>>))!;
                 var list = new List<HandlerDescriptor>();
-                if (!services.Any())
+                if (!handlers.Any())
                     return list;
-                foreach (var service in services)
+                foreach (var handler in handlers)
                 {
-                    list.Add(new HandlerWrapper<T>(service, _serviceProvider));
+                    list.Add(new HandlerDescriptor<T>(handler, _serviceProvider));
                 }
                 return list;
             });
-        var wrapper = wrappers.FirstOrDefault(w => w.CanHandle(argument));
-        if (wrapper is null)
-            return; //TODO: Exception?
-        await wrapper.HandleAsync(argument, _serviceProvider, cancellationToken);
+        var descriptor = descriptors.FirstOrDefault(w => w.CanHandle(argument));
+        if (descriptor is null)
+            return;
+        await descriptor.HandleAsync(argument, _serviceProvider, cancellationToken);
     }
 }

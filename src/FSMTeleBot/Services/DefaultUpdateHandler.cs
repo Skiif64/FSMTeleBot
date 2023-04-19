@@ -1,4 +1,4 @@
-﻿using FSMTeleBot.Internal.Mediator;
+﻿using FSMTeleBot.Internal.Dispatcher;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
@@ -8,9 +8,9 @@ namespace FSMTeleBot.Services;
 
 internal class DefaultUpdateHandler : IUpdateHandler
 {
-    private readonly IBotMediator _mediator;
+    private readonly IBotDispatcher _mediator;
 
-    public DefaultUpdateHandler(IBotMediator mediator)
+    public DefaultUpdateHandler(IBotDispatcher mediator)
     {
         _mediator = mediator;
     }

@@ -1,17 +1,17 @@
 ﻿using FSMTeleBot.Handlers.Abstractions;
 using System.Collections.Concurrent;
 
-namespace FSMTeleBot.Internal.Mediator;
+namespace FSMTeleBot.Internal.Dispatcher;
 
-public class BotMediator : IBotMediator
+public class BotDispatcher : IBotDispatcher
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly ConcurrentDictionary<Type, List<HandlerWrapper>> _handlers = new();
-    public BotMediator(IServiceProvider serviceProvider)
+    public BotDispatcher(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
     }
-   
+
     public async Task SendAsync<T>(T argument, CancellationToken cancellationToken = default)
     {
         if (argument is null)
@@ -20,7 +20,7 @@ public class BotMediator : IBotMediator
         var wrappers = _handlers.GetOrAdd(typeof(T),
             t =>
             {
-                var services = (IEnumerable<IHandler<T>>)_serviceProvider.GetService(typeof(IEnumerable<IHandler<T>>))!;                           
+                var services = (IEnumerable<IHandler<T>>)_serviceProvider.GetService(typeof(IEnumerable<IHandler<T>>))!;
                 var list = new List<HandlerWrapper>();
                 if (!services.Any())
                     return list;
@@ -31,7 +31,7 @@ public class BotMediator : IBotMediator
                 return list;
             });
         var wrapper = wrappers.FirstOrDefault(w => w.CanHandle(argument));
-        if(wrapper is null)
+        if (wrapper is null)
             return; //TODO: Exception?
         await wrapper.HandleAsync(argument, _serviceProvider, cancellationToken);
     }

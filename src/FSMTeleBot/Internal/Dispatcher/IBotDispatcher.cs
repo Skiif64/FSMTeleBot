@@ -1,9 +1,9 @@
 ﻿using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("FSMTeleBot.Tests")]
-namespace FSMTeleBot.Internal.Mediator;
+namespace FSMTeleBot.Internal.Dispatcher;
 
-internal interface IBotMediator
+internal interface IBotDispatcher
 {
     /// <summary>
     /// Send Telegram update to single handler

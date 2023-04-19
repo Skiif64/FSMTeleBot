@@ -1,6 +1,6 @@
 ﻿using FSMTeleBot.Filters;
 using FSMTeleBot.Handlers.Abstractions;
-using FSMTeleBot.Internal.Mediator;
+using FSMTeleBot.Internal.Dispatcher;
 using Moq;
 using System.ComponentModel;
 using Telegram.Bot.Types;
@@ -10,7 +10,7 @@ namespace FSMTeleBot.Tests.Mediator;
 public class MediatorTests
 {
     private readonly IServiceProvider _serviceProvider;
-    private readonly IBotMediator _mediator;
+    private readonly IBotDispatcher _dispatcher;
     private readonly Mock<IHandler<Message>> _startHandlerMock;
     private readonly Mock<IHandler<Message>> _cancelHandlerMock;
     private readonly Mock<IHandler<Message>> _emptyHandlerMock;
@@ -32,7 +32,7 @@ public class MediatorTests
         .Returns(new[] { _startHandlerMock.Object, _cancelHandlerMock.Object, _emptyHandlerMock.Object });
 
         _serviceProvider = serviceProviderMock.Object;
-        _mediator = new BotMediator(_serviceProvider);
+        _dispatcher = new BotDispatcher(_serviceProvider);
     }
 
     [SetUp]
@@ -68,7 +68,7 @@ public class MediatorTests
             }
         };
 
-        Assert.DoesNotThrowAsync(async () => await _mediator.SendAsync(message));
+        Assert.DoesNotThrowAsync(async () => await _dispatcher.SendAsync(message));
         _startHandlerMock.Verify(x => x.HandleAsync(It.IsAny<Message>(), default), Times.Once);
         _cancelHandlerMock.Verify(x => x.HandleAsync(It.IsAny<Message>(), default), Times.Never);
         _emptyHandlerMock.Verify(x => x.HandleAsync(It.IsAny<Message>(), default), Times.Never);
@@ -90,7 +90,7 @@ public class MediatorTests
             }
         };
 
-        Assert.DoesNotThrowAsync(async () => await _mediator.SendAsync(message));
+        Assert.DoesNotThrowAsync(async () => await _dispatcher.SendAsync(message));
         _startHandlerMock.Verify(x => x.HandleAsync(It.IsAny<Message>(), default), Times.Never);
         _cancelHandlerMock.Verify(x => x.HandleAsync(It.IsAny<Message>(), default), Times.Once);
         _emptyHandlerMock.Verify(x => x.HandleAsync(It.IsAny<Message>(), default), Times.Never);
@@ -111,7 +111,7 @@ public class MediatorTests
             }
         };
 
-        Assert.DoesNotThrowAsync(async () => await _mediator.SendAsync(message));
+        Assert.DoesNotThrowAsync(async () => await _dispatcher.SendAsync(message));
         _startHandlerMock.Verify(x => x.HandleAsync(It.IsAny<Message>(), default), Times.Never);
         _cancelHandlerMock.Verify(x => x.HandleAsync(It.IsAny<Message>(), default), Times.Never);
         _emptyHandlerMock.Verify(x => x.HandleAsync(It.IsAny<Message>(), default), Times.Once);

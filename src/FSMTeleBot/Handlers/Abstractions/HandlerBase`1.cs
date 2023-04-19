@@ -10,15 +10,15 @@ public abstract class HandlerBase<TMessage> : IHandler<TMessage>
 
     public HandlerBase(ITelegramBotClient client)
     {
-        Client = client;      
+        Client = client;
     }
 
     public abstract Task HandleAsync(TMessage data, CancellationToken cancellationToken = default);
     internal async Task HandleInternalAsync(TMessage data, IServiceProvider serviceProvider, CancellationToken cancellationToken = default)
     {
-        if(StateContext is null)
+        if (StateContext is null)
             await SetStateContextAsync(data, serviceProvider, cancellationToken);
-        
+
         await HandleAsync(data, cancellationToken)
             .ConfigureAwait(false);
     }
@@ -28,4 +28,13 @@ public abstract class HandlerBase<TMessage> : IHandler<TMessage>
         var contextFactory = (IChatContextFactory)serviceProvider.GetService(typeof(IChatContextFactory))!;
         StateContext = await contextFactory.GetContextAsync(data, cancellationToken);
     }
+
+    #region For testing
+#pragma warning disable CS8618
+    internal HandlerBase()
+    {
+
+    }
+#pragma warning restore
+    #endregion
 }

@@ -28,7 +28,7 @@ internal class HandlerWrapper<TMessage> : HandlerWrapper
             .SingleOrDefault();
         _serviceProvider = serviceProvider;
     }
-
+    //TODO: remove IServiceProvider?
     public override Task HandleAsync(object argument, IServiceProvider provider, CancellationToken cancellationToken = default)
     {        
         if(argument is not TMessage message)

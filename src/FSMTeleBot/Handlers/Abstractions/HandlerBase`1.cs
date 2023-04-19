@@ -14,10 +14,18 @@ public abstract class HandlerBase<TMessage> : IHandler<TMessage>
     }
 
     public abstract Task HandleAsync(TMessage data, CancellationToken cancellationToken = default);
-    internal async Task HandleInternalAsync(TMessage data, CancellationToken cancellationToken = default)
+    internal async Task HandleInternalAsync(TMessage data, IServiceProvider serviceProvider, CancellationToken cancellationToken = default)
     {
-        //TODO: implement
+        if(StateContext is null)
+            await SetStateContextAsync(data, serviceProvider, cancellationToken);
+        
         await HandleAsync(data, cancellationToken)
             .ConfigureAwait(false);
+    }
+
+    private async Task SetStateContextAsync(TMessage data, IServiceProvider serviceProvider, CancellationToken cancellationToken)
+    {
+        var contextFactory = (IChatContextFactory)serviceProvider.GetService(typeof(IChatContextFactory))!;
+        StateContext = await contextFactory.GetContextAsync(data, cancellationToken);
     }
 }

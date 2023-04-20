@@ -5,12 +5,12 @@ using System.ComponentModel;
 
 namespace FSMTeleBot.Internal;
 
-internal abstract class HandlerDescriptor
+internal abstract class HandlerWrapper
 {
     public abstract Task HandleAsync(object argument, IServiceProvider provider, CancellationToken cancellationToken = default);
     public abstract bool CanHandle(object argument);
 }
-internal class HandlerDescriptor<TMessage> : HandlerDescriptor
+internal class HandlerDescriptor<TMessage> : HandlerWrapper
 {
     private readonly Type _handlerType;
     private readonly IHandler<TMessage> _handler;

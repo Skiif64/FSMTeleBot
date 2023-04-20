@@ -6,7 +6,7 @@ namespace FSMTeleBot.Internal.Dispatcher;
 public class BotDispatcher : IBotDispatcher
 {
     private readonly IServiceProvider _serviceProvider;
-    private readonly ConcurrentDictionary<Type, List<HandlerDescriptor>> _descriptors = new();
+    private readonly ConcurrentDictionary<Type, List<HandlerWrapper>> _wrappers = new();
     public BotDispatcher(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
@@ -17,11 +17,11 @@ public class BotDispatcher : IBotDispatcher
         if (argument is null)
             throw new NullReferenceException(nameof(argument));
 
-        var descriptors = _descriptors.GetOrAdd(typeof(T),
+        var wrappers = _wrappers.GetOrAdd(typeof(T),
             t =>
             {
                 var handlers = (IEnumerable<IHandler<T>>)_serviceProvider.GetService(typeof(IEnumerable<IHandler<T>>))!;
-                var list = new List<HandlerDescriptor>();
+                var list = new List<HandlerWrapper>();
                 if (!handlers.Any())
                     return list;
                 foreach (var handler in handlers)
@@ -30,9 +30,9 @@ public class BotDispatcher : IBotDispatcher
                 }
                 return list;
             });
-        var descriptor = descriptors.FirstOrDefault(w => w.CanHandle(argument));
-        if (descriptor is null)
+        var wrapper = wrappers.FirstOrDefault(w => w.CanHandle(argument));
+        if (wrapper is null)
             return;
-        await descriptor.HandleAsync(argument, _serviceProvider, cancellationToken);
+        await wrapper.HandleAsync(argument, _serviceProvider, cancellationToken);
     }
 }

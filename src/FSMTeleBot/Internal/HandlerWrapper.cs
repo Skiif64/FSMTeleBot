@@ -11,14 +11,14 @@ internal abstract class HandlerWrapper
     public abstract Task HandleAsync(object argument, IServiceProvider provider, CancellationToken cancellationToken = default);
     public abstract bool CanHandle(object argument);
 }
-internal class HandlerDescriptor<TData> : HandlerWrapper
+internal class HandlerWrapper<TData> : HandlerWrapper
 {
     private readonly Type _handlerType;
     private readonly IHandler<TData, IHandlerContext<TData>> _handler;
     private readonly FilterAttribute? _filter;
     private readonly IServiceProvider _serviceProvider;
 
-    public HandlerDescriptor(IHandler<TData, IHandlerContext<TData>> handler, IServiceProvider serviceProvider)
+    public HandlerWrapper(IHandler<TData, IHandlerContext<TData>> handler, IServiceProvider serviceProvider)
     {
         //TODO: Validation
         _handler = handler;

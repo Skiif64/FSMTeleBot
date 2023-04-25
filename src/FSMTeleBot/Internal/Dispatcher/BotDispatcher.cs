@@ -29,7 +29,7 @@ public class BotDispatcher : IBotDispatcher
                     return list;
                 foreach (var handler in handlers)
                 {
-                    list.Add(new HandlerDescriptor<T>(handler, _serviceProvider));
+                    list.Add(new HandlerWrapper<T>(handler, _serviceProvider));
                 }
                 return list;
             });

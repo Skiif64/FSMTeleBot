@@ -1,5 +1,6 @@
 ﻿using FSMTeleBot.Filters;
 using FSMTeleBot.Handlers.Abstractions;
+using FSMTeleBot.Handlers.Contexts;
 using System.ComponentModel;
 
 
@@ -10,14 +11,14 @@ internal abstract class HandlerWrapper
     public abstract Task HandleAsync(object argument, IServiceProvider provider, CancellationToken cancellationToken = default);
     public abstract bool CanHandle(object argument);
 }
-internal class HandlerDescriptor<TMessage> : HandlerWrapper
+internal class HandlerDescriptor<TData> : HandlerWrapper
 {
     private readonly Type _handlerType;
-    private readonly IHandler<TMessage> _handler;
+    private readonly IHandler<TData, IHandlerContext<TData>> _handler;
     private readonly FilterAttribute? _filter;
     private readonly IServiceProvider _serviceProvider;
 
-    public HandlerDescriptor(IHandler<TMessage> handler, IServiceProvider serviceProvider)
+    public HandlerDescriptor(IHandler<TData, IHandlerContext<TData>> handler, IServiceProvider serviceProvider)
     {
         //TODO: Validation
         _handler = handler;
@@ -27,38 +28,40 @@ internal class HandlerDescriptor<TMessage> : HandlerWrapper
             .OfType<FilterAttribute>()
             .SingleOrDefault();
         _serviceProvider = serviceProvider;
-    }    
-    public override Task HandleAsync(object argument, IServiceProvider provider, CancellationToken cancellationToken = default)
+    }
+    public override Task HandleAsync(object data, IServiceProvider provider, CancellationToken cancellationToken = default)
     {
-        if (argument is not TMessage message)
-            throw new ArgumentException(nameof(argument));
+        if (data is not TData message)
+            throw new ArgumentException(nameof(data));
 
         return HandleAsync(message, provider, cancellationToken);
     }
 
-    public Task HandleAsync(TMessage message, IServiceProvider provider, CancellationToken cancellationToken = default)
+    public Task HandleAsync(TData data, IServiceProvider provider, CancellationToken cancellationToken = default)
     {
-        if (_handler is HandlerBase<TMessage> baseHandler)
-        {
-            return baseHandler.HandleInternalAsync(message, provider, cancellationToken);
-        }
-        else
-        {
-            return _handler.HandleAsync(message, cancellationToken);
-        }
+        var context = BuildContext(data);
+        return _handler.HandleAsync(context, cancellationToken);
+
     }
 
     public override bool CanHandle(object argument)
     {
-        if (argument is not TMessage message)
+        if (argument is not TData message)
             throw new ArgumentException(nameof(argument));
         return CanHandle(message);
     }
 
-    public bool CanHandle(TMessage message)
+    public bool CanHandle(TData data)
     {
         if (_filter is null)
             return true;
-        return _filter.IsMatch(message, _serviceProvider);
+        if (data is null)//TODO: false???
+            return false;
+        return _filter.IsMatch(data, _serviceProvider);
+    }
+
+    private IHandlerContext<TData> BuildContext(TData data)
+    {//TODO: normal Context
+        return new HandlerContext<TData>(data);
     }
 }

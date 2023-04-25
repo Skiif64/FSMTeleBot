@@ -20,7 +20,8 @@ public class BotDispatcher : IBotDispatcher
         var wrappers = _wrappers.GetOrAdd(typeof(T),
             t =>
             {
-                var handlers = (IEnumerable<IHandler<T>>)_serviceProvider.GetService(typeof(IEnumerable<IHandler<T>>))!;
+                var handlers = (IEnumerable<IHandler<T, IHandlerContext<T>>>)_serviceProvider
+                .GetService(typeof(IEnumerable<IHandler<T, IHandlerContext<T>>>))!;
                 var list = new List<HandlerWrapper>();
                 if (!handlers.Any())
                     return list;

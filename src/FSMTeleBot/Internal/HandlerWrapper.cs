@@ -31,15 +31,14 @@ internal class HandlerDescriptor<TData> : HandlerWrapper
     }
     public override Task HandleAsync(object data, IServiceProvider provider, CancellationToken cancellationToken = default)
     {
-        if (data is not TData message)
+        if (data is not IHandlerContext<TData> message)
             throw new ArgumentException(nameof(data));
 
         return HandleAsync(message, provider, cancellationToken);
     }
 
-    public Task HandleAsync(TData data, IServiceProvider provider, CancellationToken cancellationToken = default)
-    {
-        var context = BuildContext(data);
+    public Task HandleAsync(IHandlerContext<TData> context, IServiceProvider provider, CancellationToken cancellationToken = default)
+    {        
         return _handler.HandleAsync(context, cancellationToken);
 
     }
@@ -58,10 +57,5 @@ internal class HandlerDescriptor<TData> : HandlerWrapper
         if (data is null)//TODO: false???
             return false;
         return _filter.IsMatch(data, _serviceProvider);
-    }
-
-    private IHandlerContext<TData> BuildContext(TData data)
-    {//TODO: normal Context
-        return new HandlerContext<TData>(data);
-    }
+    }    
 }

@@ -9,17 +9,17 @@ namespace FSMTeleBot.Tests.DITests;
 
 public class RegistrationTests
 {
-    public class TestMessageHandler : IHandler<Message>
+    public class TestMessageHandler : IHandler<Message, IHandlerContext<Message>>
     {
-        public Task HandleAsync(Message data, CancellationToken cancellationToken = default)
+        public Task HandleAsync(IHandlerContext<Message> data, CancellationToken cancellationToken = default)
         {
             return Task.CompletedTask;
         }
     }
 
-    public class TestMessageHandler2 : IHandler<Message>
+    public class TestMessageHandler2 : IHandler<Message, IHandlerContext<Message>>
     {
-        public Task HandleAsync(Message data, CancellationToken cancellationToken = default)
+        public Task HandleAsync(IHandlerContext<Message> data, CancellationToken cancellationToken = default)
         {
             return Task.CompletedTask;
         }
@@ -40,9 +40,9 @@ public class RegistrationTests
 
         CollectionAssert.IsNotEmpty(serviceCollection);
 
-        Assert.That(serviceCollection[0].ServiceType, Is.EqualTo(typeof(IHandler<Message>)));
+        Assert.That(serviceCollection[0].ServiceType, Is.EqualTo(typeof(IHandler<Message, IHandlerContext<Message>>)));
         Assert.That(serviceCollection[0].ImplementationType, Is.EqualTo(typeof(TestMessageHandler)));
-        Assert.That(serviceCollection[1].ServiceType, Is.EqualTo(typeof(IHandler<Message>)));
+        Assert.That(serviceCollection[1].ServiceType, Is.EqualTo(typeof(IHandler<Message, IHandlerContext<Message>>)));
         Assert.That(serviceCollection[1].ImplementationType, Is.EqualTo(typeof(TestMessageHandler2)));
     }  
 }

@@ -1,8 +1,6 @@
 ﻿using FSMTeleBot.Abstractions;
 using FSMTeleBot.Filters;
-using FSMTeleBot.Handlers.Abstractions;
 using Moq;
-using System.ComponentModel;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
@@ -30,18 +28,10 @@ public class FilterTests
         _filterWithChatMember = new MessageFilterAttribute { Allowed = ChatMemberStatus.Member };
         _filterWithoutStrict = new MessageFilterAttribute();
 
-        _message = new Message
-        {
-            Text = "",
-            Chat = new Chat
-            {
-                Id = 1
-            },
-            From = new User
-            {
-                Id = 1
-            }
-        };
+        _message = MessageBuilder
+            .Create()
+            .Message;
+        
     }
     
 

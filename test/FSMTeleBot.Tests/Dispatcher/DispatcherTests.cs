@@ -54,19 +54,10 @@ public class DispatcherTests
 
     [Test]
     public void WhenSend_StartMessage_ThenHandleStartHandler()
-    {
-        var message = new Message
-        {
-            Text = "start",
-            Chat = new Chat
-            {
-                Id = 1
-            },
-            From = new User
-            {
-                Id = 1
-            }
-        };
+    {        
+        var message = MessageBuilder.Create()
+            .WithText("start")
+            .Message;
 
         Assert.DoesNotThrowAsync(async () => await _dispatcher.SendAsync(message));
         _startHandlerMock.Verify(x => x.HandleAsync(It.IsAny<IHandlerContext<Message>>(), default), Times.Once);
@@ -77,18 +68,9 @@ public class DispatcherTests
     [Test]
     public void WhenSend_CancelMessage_ThenHandleCancelHandler()
     {
-        var message = new Message
-        {
-            Text = "cancel",
-            Chat = new Chat
-            {
-                Id = 1
-            },
-            From = new User
-            {
-                Id = 1
-            }
-        };
+        var message = MessageBuilder.Create()
+            .WithText("cancel")
+            .Message;
 
         Assert.DoesNotThrowAsync(async () => await _dispatcher.SendAsync(message));
         _startHandlerMock.Verify(x => x.HandleAsync(It.IsAny<IHandlerContext<Message>>(), default), Times.Never);
@@ -97,19 +79,10 @@ public class DispatcherTests
     }
     [Test]
     public void WhenSend_NoneMessage_ThenHandleEmptyHandler()
-    {
-        var message = new Message
-        {
-            Text = "none",
-            Chat = new Chat
-            {
-                Id = 1
-            },
-            From = new User
-            {
-                Id = 1
-            }
-        };
+    {        
+        var message = MessageBuilder.Create()
+            .WithText("none")
+            .Message;
 
         Assert.DoesNotThrowAsync(async () => await _dispatcher.SendAsync(message));
         _startHandlerMock.Verify(x => x.HandleAsync(It.IsAny<IHandlerContext<Message>>(), default), Times.Never);

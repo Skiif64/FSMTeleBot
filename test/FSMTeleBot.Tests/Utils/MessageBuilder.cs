@@ -8,7 +8,15 @@ internal class MessageBuilder
     {
         Message = new Message
         {
-            Text = string.Empty,            
+            Text = string.Empty,
+            Chat = new Chat
+            {
+                Id = 1,
+            },
+            From = new User
+            {
+                Id = 1,
+            }
         };
     }    
 

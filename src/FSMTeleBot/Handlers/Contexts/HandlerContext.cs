@@ -2,7 +2,7 @@
 using Telegram.Bot;
 
 namespace FSMTeleBot.Handlers.Contexts;
-public abstract class HandlerContext<TData> : IHandlerContext<TData>
+public class HandlerContext<TData> : IHandlerContext<TData> //TODO: abstract
 {
     public TData Data { get; }
     public ITelegramBotClient Client { get; }

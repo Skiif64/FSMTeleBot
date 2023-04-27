@@ -5,8 +5,8 @@ using Telegram.Bot.Types;
 namespace FSMTeleBot.Handlers.Contexts;
 public class MessageContext : HandlerContext<Message>
 {
-    public IChatState ChatState { get; }
-    public MessageContext(Message data, ITelegramBotClient client, IChatState chatState) : base(data, client)
+    public IChatContext ChatState { get; }
+    public MessageContext(Message data, ITelegramBotClient client, IChatContext chatState) : base(data, client)
     {
         ChatState = chatState;
     }

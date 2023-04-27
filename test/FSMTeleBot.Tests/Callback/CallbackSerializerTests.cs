@@ -55,4 +55,22 @@ internal class CallbackSerializerTests
         });
 
     }
+
+    [Test]
+    public void WhenCanDesirializeToTestCallbackQuery_TestQueryString_ThenShouldReturnTrue()
+    {
+        var queryString = "Test;1;2";
+        var type = typeof(TestCallbackQuery);
+        var actual = _serializer.CanDeserializeTo(queryString, type);
+        Assert.That(actual, Is.True);
+    }
+
+    [Test]
+    public void WhenCanDesirializeToTestCallbackQuery_UnknownQueryString_ThenShouldReturnFalse()
+    {
+        var queryString = "Unknown;1;2";
+        var type = typeof(TestCallbackQuery);
+        var actual = _serializer.CanDeserializeTo(queryString, type);
+        Assert.That(actual, Is.False);
+    }
 }

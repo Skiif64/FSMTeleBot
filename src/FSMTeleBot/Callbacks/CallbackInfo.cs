@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 
 namespace FSMTeleBot.Callbacks;
-public class CallbackInfo : IEnumerable<string>
+public readonly record struct CallbackInfo : IEnumerable<string>
 {
-    public string Header { get; }
-    public string[] Data { get; }
+    public string Header { get; } = string.Empty;
+    public string[] Data { get; } = Array.Empty<string>();
 
     internal CallbackInfo(string header, string[] data)
     {

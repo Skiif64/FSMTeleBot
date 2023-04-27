@@ -21,9 +21,7 @@ internal class CallbackSerializer : ICallbackSerializer
 
         var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
-        var query = Activator.CreateInstance<T>();
-        var headerProperty = properties[0];
-        headerProperty.SetValue(query, info.Header);
+        var query = Activator.CreateInstance<T>();        
         var dataProperties = properties[1..];
 
         int i = 0;

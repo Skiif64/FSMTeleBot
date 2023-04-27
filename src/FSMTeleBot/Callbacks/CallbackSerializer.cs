@@ -15,9 +15,10 @@ internal class CallbackSerializer : ICallbackSerializer
     }
 
     public T DeserializeAs<T>(string callbackData) where T : ICallbackQuery, new()
-        => (T)DeserializeAs(callbackData, typeof(T));
-
-    public ICallbackQuery DeserializeAs(string callbackData, Type type)
+        => (T)(DeserializeAsType(callbackData, typeof(T))
+        ?? throw new ArgumentException("Cannot deserialize string to type", nameof(T)));
+    //TODO: separate DeserializeAs and TryDeserializeAs
+    public ICallbackQuery? DeserializeAsType(string callbackData, Type type)
     {//TODO: Property caching?
         if (!type.IsAssignableTo(typeof(ICallbackQuery)))
             throw new ArgumentException("Type is not a ICallbackQuery", nameof(type));
@@ -26,7 +27,9 @@ internal class CallbackSerializer : ICallbackSerializer
 
         var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
-        var query = Activator.CreateInstance(type);
+        var query = (ICallbackQuery)Activator.CreateInstance(type)!;
+        if (query.Header != info.Header)
+            return null;
         var dataProperties = properties[1..];
 
         int i = 0;
@@ -36,7 +39,7 @@ internal class CallbackSerializer : ICallbackSerializer
             i++;
         }
 
-        return (ICallbackQuery)query!;
+        return query!;
     }
 
     public string Serialize<T>(T data) where T : ICallbackQuery, new()

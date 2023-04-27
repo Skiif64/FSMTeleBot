@@ -25,13 +25,17 @@ public class DispatcherTests
 
         _emptyHandlerMock = new Mock<IHandler<Message, IHandlerContext<Message>>>();
         TypeDescriptor.AddAttributes(_emptyHandlerMock.Object, new MessageFilterAttribute());
+        
+        _serviceProvider = new ServiceProviderBuilder()
+            .Add(new[] 
+            { 
+                _startHandlerMock.Object,
+                _cancelHandlerMock.Object,
+                _emptyHandlerMock.Object 
+            },
+            typeof(IEnumerable<IHandler<Message, IHandlerContext<Message>>>))
+            .ServiceProvider;
 
-        var serviceProviderMock = new Mock<IServiceProvider>();
-        serviceProviderMock
-            .Setup(x => x.GetService(typeof(IEnumerable<IHandler<Message, IHandlerContext<Message>>>)))
-        .Returns(new[] { _startHandlerMock.Object, _cancelHandlerMock.Object, _emptyHandlerMock.Object });
-
-        _serviceProvider = serviceProviderMock.Object;
         _dispatcher = new BotDispatcher(_serviceProvider);
     }
 

@@ -4,7 +4,7 @@ using Telegram.Bot.Types;
 namespace FSMTeleBot.Filters;
 public class CallbackQueryFilterAttribute : FilterAttribute
 {
-    public string? QueryHeader { get; set; }
+    public Type? QueryType { get; set; }
 
     public override bool IsMatch(object argument, IServiceProvider provider)
     {
@@ -16,14 +16,14 @@ public class CallbackQueryFilterAttribute : FilterAttribute
 
     public bool IsMatch(CallbackQuery query, IServiceProvider provider)
     {
-        if(QueryHeader is not null)
+        if(QueryType is not null)
         {
             var serializer = (ICallbackSerializer)provider
                 .GetService(typeof(ICallbackSerializer))!;
-            var callback = serializer.Deserialize(query.Data
-                ?? throw new ArgumentNullException(nameof(query.Data)));
-
-            if (callback.Header != QueryHeader)
+            var callback = serializer.DeserializeAsType(query.Data
+                ?? throw new ArgumentNullException(nameof(query.Data)),
+                QueryType);
+            if (callback is null)
                 return false;
         }
         return true;

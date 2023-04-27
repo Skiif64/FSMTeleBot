@@ -20,10 +20,9 @@ public class CallbackQueryFilterAttribute : FilterAttribute
         {
             var serializer = (ICallbackSerializer)provider
                 .GetService(typeof(ICallbackSerializer))!;
-            var callback = serializer.DeserializeAsType(query.Data
-                ?? throw new ArgumentNullException(nameof(query.Data)),
-                QueryType);
-            if (callback is null)
+            if (query.Data is null)
+                return false;
+            if (!serializer.CanDeserializeTo(query.Data, QueryType))
                 return false;
         }
         return true;

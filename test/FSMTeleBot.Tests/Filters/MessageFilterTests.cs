@@ -1,8 +1,6 @@
 ﻿using FSMTeleBot.Filters;
-using FSMTeleBot.Handlers.Abstractions;
 using FSMTeleBot.States;
 using FSMTeleBot.States.Abstractions;
-using FSMTeleBot.Tests.FSM;
 using Moq;
 using Telegram.Bot.Types;
 
@@ -53,18 +51,9 @@ public class MessageFilterTests
     [Test]
     public void WhenFilterWithoutArgsIsMatch_TextMessage_ThenShouldReturnTrue()
     {
-        var message = new Message
-        {
-            Text = "message",
-            From = new User
-            {
-                Id = 1
-            },
-            Chat = new Chat
-            {
-                Id = 1
-            }
-        };
+        var message = MessageBuilder.Create()
+            .WithText("message")
+            .Message;        
 
         var result = _filterWithoutArgs.IsMatch(message, _serviceProvider);
 
@@ -74,18 +63,9 @@ public class MessageFilterTests
     [Test]
     public void WhenFilterWithContainsIsMatch_OnlyMessageText_ThenShouldReturnTrue()
     {
-        var message = new Message
-        {
-            Text = "message",
-            From = new User
-            {
-                Id = 1
-            },
-            Chat = new Chat
-            {
-                Id = 1
-            }
-        };
+        var message = MessageBuilder.Create()
+           .WithText("message")
+           .Message;
 
         var result = _filterWithContains.IsMatch(message, _serviceProvider);
 
@@ -96,18 +76,9 @@ public class MessageFilterTests
     [Test]
     public void WhenFilterWithContainsIsMatch_InvalidMessageText_ThenShouldReturnFalse()
     {
-        var message = new Message
-        {
-            Text = "messsssage",
-            From = new User
-            {
-                Id = 1
-            },
-            Chat = new Chat
-            {
-                Id = 1
-            }
-        };
+        var message = MessageBuilder.Create()
+           .WithText("messsssage")
+           .Message;
 
         var result = _filterWithContains.IsMatch(message, _serviceProvider);
 
@@ -118,19 +89,10 @@ public class MessageFilterTests
     [Test]
     public void WhenFilterWithContainsIsMatch_ContainsMessageText_ThenShouldReturnTrue()
     {
-        var message = new Message
-        {
-            Text = "test-test message test-test-test",
-            From = new User
-            {
-                Id = 1
-            },
-            Chat = new Chat
-            {
-                Id = 1
-            }
-        };
-
+        var message = MessageBuilder.Create()
+            .WithText("test-test message test-test-test")
+            .Message;
+        
         var result = _filterWithContains.IsMatch(message, _serviceProvider);
 
         Assert.IsTrue(result);
@@ -140,18 +102,9 @@ public class MessageFilterTests
     [Test]
     public void WhenFilterWithContainsCommandIsMatch_OnlyStartCommand_ThenShouldReturnTrue()
     {
-        var message = new Message
-        {
-            Text = "/start",
-            From = new User
-            {
-                Id = 1
-            },
-            Chat = new Chat
-            {
-                Id = 1
-            }
-        };
+        var message = MessageBuilder.Create()
+            .WithText("/start")
+            .Message;
 
         var result = _filterWithContainsCommand.IsMatch(message, _serviceProvider);
 
@@ -162,18 +115,9 @@ public class MessageFilterTests
     [Test]
     public void WhenFilterWithContainsCommandIsMatch_NotContainsCommand_ThenShouldReturnFalse()
     {
-        var message = new Message
-        {
-            Text = "start",
-            From = new User
-            {
-                Id = 1
-            },
-            Chat = new Chat
-            {
-                Id = 1
-            }
-        };
+        var message = MessageBuilder.Create()
+            .WithText("start")
+            .Message;
 
         var result = _filterWithContainsCommand.IsMatch(message, _serviceProvider);
 
@@ -184,18 +128,9 @@ public class MessageFilterTests
     [Test]
     public void WhenFilterWithContainsCommandIsMatch_StartsStartCommand_ThenShouldReturnTrue()
     {
-        var message = new Message
-        {
-            Text = "/start command arguments",
-            From = new User
-            {
-                Id = 1
-            },
-            Chat = new Chat
-            {
-                Id = 1
-            }
-        };
+        var message = MessageBuilder.Create()
+            .WithText("/start command arguments")
+            .Message;
 
         var result = _filterWithContainsCommand.IsMatch(message, _serviceProvider);
 
@@ -206,18 +141,9 @@ public class MessageFilterTests
     [Test]
     public void WhenFilterWithRegexpIsMatch_MessageWithValidRegex_ThenShouldReturnTrue()
     {
-        var message = new Message
-        {
-            Text = "12345678901010 test-test",
-            From = new User
-            {
-                Id = 1
-            },
-            Chat = new Chat
-            {
-                Id = 1
-            }
-        };
+        var message = MessageBuilder.Create()
+            .WithText("12345678901010 test-test")
+            .Message;
 
         var result = _filterWithRegexp.IsMatch(message, _serviceProvider);
 
@@ -228,18 +154,9 @@ public class MessageFilterTests
     [Test]
     public void WhenFilterWithRequiredStateIsMatch_RequiredState_ThenShouldReturnTrue()
     {
-        var message = new Message
-        {
-            Text = "none",
-            From = new User
-            {
-                Id = 1
-            },
-            Chat = new Chat
-            {
-                Id = 1
-            }
-        };
+        var message = MessageBuilder.Create()
+            .WithText("none")
+            .Message;
 
         _chatContextMock.Reset();
         _chatContextMock
@@ -255,18 +172,9 @@ public class MessageFilterTests
     [Test]
     public void WhenFilterWithRequiredStateIsMatch_NotInRequiredState_ThenShouldReturnFalse()
     {
-        var message = new Message
-        {
-            Text = "none",
-            From = new User
-            {
-                Id = 1
-            },
-            Chat = new Chat
-            {
-                Id = 1
-            }
-        };
+        var message = MessageBuilder.Create()
+            .WithText("none")
+            .Message;
 
         _chatContextMock.Reset();
         _chatContextMock

@@ -1,5 +1,7 @@
 ﻿using FSMTeleBot.Handlers.Abstractions;
+using FSMTeleBot.Handlers.Contexts;
 using System.Collections.Concurrent;
+using System.Xml.Linq;
 
 namespace FSMTeleBot.Internal.Dispatcher;
 
@@ -20,19 +22,26 @@ public class BotDispatcher : IBotDispatcher
         var wrappers = _wrappers.GetOrAdd(typeof(T),
             t =>
             {
-                var handlers = (IEnumerable<IHandler<T>>)_serviceProvider.GetService(typeof(IEnumerable<IHandler<T>>))!;
+                var handlers = (IEnumerable<IHandler<T, IHandlerContext<T>>>)_serviceProvider
+                .GetService(typeof(IEnumerable<IHandler<T, IHandlerContext<T>>>))!;
                 var list = new List<HandlerWrapper>();
                 if (!handlers.Any())
                     return list;
                 foreach (var handler in handlers)
                 {
-                    list.Add(new HandlerDescriptor<T>(handler, _serviceProvider));
+                    list.Add(new HandlerWrapper<T>(handler, _serviceProvider));
                 }
                 return list;
             });
         var wrapper = wrappers.FirstOrDefault(w => w.CanHandle(argument));
         if (wrapper is null)
             return;
-        await wrapper.HandleAsync(argument, _serviceProvider, cancellationToken);
+        var context = BuildContext(argument);
+        await wrapper.HandleAsync(context, _serviceProvider, cancellationToken);
+    }
+
+    private IHandlerContext<TData> BuildContext<TData>(TData data)
+    {//TODO: normal Context
+        return new HandlerContext<TData>(data);
     }
 }

@@ -12,12 +12,12 @@ namespace FSMTeleBot.Internal.DependencyInjectionExtensions
         {
             var handlerTypes = new[]
             {
-                typeof(IHandler<Message>)
+                typeof(IHandler<Message, IHandlerContext<Message>>)
             };
             foreach (var handlerType in handlerTypes)
             {
                 var handlers = assemblies
-                    .SelectMany(assembly => typeof(IHandler<>) //TODO: Fix registration
+                    .SelectMany(assembly => typeof(IHandler<,>) //TODO: Fix registration
                     .GetAllImplementationOfGenericInterface(assembly));
                 foreach (var handler in handlers)
                 {

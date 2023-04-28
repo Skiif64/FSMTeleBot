@@ -21,13 +21,20 @@ public static class ServiceCollectionExtensions
         services.AddHandlers(configuration);
         services.AddRequiredServices(configuration);
         services.AddUpdateDescriptors(configuration);
+        services.AddHandlerContextFactories(configuration);
         return services;
     }
 
-    private static IServiceCollection AddHandlers(this IServiceCollection services, BotBuilderConfiguration configuration) 
+    private static IServiceCollection AddHandlers(
+        this IServiceCollection services, BotBuilderConfiguration configuration) 
         =>services.AddHandlers(configuration.Assemblies);
-    private static IServiceCollection AddUpdateDescriptors(this IServiceCollection services, BotBuilderConfiguration configuration)
+    private static IServiceCollection AddUpdateDescriptors(
+        this IServiceCollection services, BotBuilderConfiguration configuration)
         => services.AddUpdateDescriptors(configuration.Assemblies);
+
+    private static IServiceCollection AddHandlerContextFactories(
+        this IServiceCollection services, BotBuilderConfiguration configuration)
+        => services.AddHandlerContextFactories(configuration.Assemblies);
 
 
 

@@ -1,11 +1,5 @@
-﻿using FSMTeleBot.Callbacks;
-using FSMTeleBot.Handlers.Abstractions;
-using FSMTeleBot.Handlers.Contexts;
-using FSMTeleBot.States.Abstractions;
+﻿using FSMTeleBot.Handlers.Abstractions;
 using System.Collections.Concurrent;
-using System.Xml.Linq;
-using Telegram.Bot;
-using Telegram.Bot.Types;
 
 namespace FSMTeleBot.Internal.Dispatcher;
 
@@ -47,20 +41,12 @@ public class BotDispatcher : IBotDispatcher
     private async Task<IHandlerContext<TData>> BuildContextAsync<TData>(
         TData data, CancellationToken cancellationToken)
     {//TODO: normal Context
-        var client = (ITelegramBotClient)_serviceProvider.GetService(typeof(ITelegramBotClient))!;
-              
-        //if(data is Message message)
-        //{
-        //    var contextFactory = (IChatContextFactory)_serviceProvider.GetService(typeof(IChatContextFactory))!;
-        //    var chatContext = await contextFactory.GetContextAsync(data, cancellationToken);
-        //    return (IHandlerContext<TData>)new MessageContext(message, client, chatContext);
-        //}
-        //else if(data is CallbackQuery query)
-        //{
-        //    var serializer = (ICallbackSerializer)_serviceProvider.GetService(typeof(ICallbackSerializer))!;
-        //    var callback = serializer.DeserializeAs(query.Data, wrapper.)
-        //    return (IHandlerContext<TData>)new CallbackQueryContext(message, client);
-        //}
-        return new HandlerContext<TData>(data, client);        
+        var factory = _serviceProvider
+            .GetService(typeof(IHandlerContextFactory<TData>))
+            as IHandlerContextFactory<TData>;
+        if (factory is null)
+            throw new ArgumentException("Cannot resolve context factory for type.", nameof(TData));
+
+        return await factory.CreateAsync(data, cancellationToken);
     }
 }

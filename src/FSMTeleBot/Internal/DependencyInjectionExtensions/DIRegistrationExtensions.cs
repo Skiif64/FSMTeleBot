@@ -37,5 +37,19 @@ namespace FSMTeleBot.Internal.DependencyInjectionExtensions
             }
             return services;
         }
+
+        public static IServiceCollection AddHandlerContextFactories(this IServiceCollection services, IEnumerable<Assembly> assemblies)
+        {
+            var factories = assemblies
+                .SelectMany(ass => typeof(IHandlerContextFactory<>)
+                .GetAllImplementationOfGenericInterface(ass));
+            foreach(var factory in factories)
+            {
+                var generic = factory.GetGenericArguments()[0];
+                services.AddTransient(
+                    typeof(IHandlerContextFactory<>).MakeGenericType(generic), factory);
+            }
+            return services;
+        }
     }
 }

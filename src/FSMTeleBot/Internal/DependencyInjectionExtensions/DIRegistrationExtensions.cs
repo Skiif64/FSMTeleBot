@@ -1,4 +1,5 @@
 ﻿using FSMTeleBot.Handlers.Abstractions;
+using FSMTeleBot.Handlers.Contexts;
 using FSMTeleBot.States.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -12,7 +13,9 @@ namespace FSMTeleBot.Internal.DependencyInjectionExtensions
         {
             var handlerTypes = new[]
             {
-                typeof(IHandler<Message, IHandlerContext<Message>>)
+                typeof(IHandler<Message, IHandlerContext<Message>>),
+                typeof(IHandler<Message, HandlerContext<Message>>),
+                typeof(IHandler<Message, MessageContext>),                
             };
             foreach (var handlerType in handlerTypes)
             {

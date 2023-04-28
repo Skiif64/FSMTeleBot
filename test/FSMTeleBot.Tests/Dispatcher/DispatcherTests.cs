@@ -15,6 +15,8 @@ public class DispatcherTests
     private readonly Mock<IHandler<Message, IHandlerContext<Message>>> _cancelHandlerMock;
     private readonly Mock<IHandler<Message, IHandlerContext<Message>>> _emptyHandlerMock;
 
+    private readonly Mock<IHandlerContextFactory<Message>> _contextFactoryMock;
+
     public DispatcherTests()
     {
         _startHandlerMock = new Mock<IHandler<Message, IHandlerContext<Message>>>();
@@ -25,6 +27,8 @@ public class DispatcherTests
 
         _emptyHandlerMock = new Mock<IHandler<Message, IHandlerContext<Message>>>();
         TypeDescriptor.AddAttributes(_emptyHandlerMock.Object, new MessageFilterAttribute());
+
+        _contextFactoryMock = new Mock<IHandlerContextFactory<Message>>();
         
         _serviceProvider = new ServiceProviderBuilder()
             .Add(new[] 
@@ -34,6 +38,7 @@ public class DispatcherTests
                 _emptyHandlerMock.Object 
             },
             typeof(IEnumerable<IHandler<Message, IHandlerContext<Message>>>))
+            .Add(_contextFactoryMock.Object)
             .ServiceProvider;
 
         _dispatcher = new BotDispatcher(_serviceProvider);
@@ -54,6 +59,9 @@ public class DispatcherTests
         _emptyHandlerMock
            .Setup(x => x.HandleAsync(It.IsAny<IHandlerContext<Message>>(), default))
            .Returns(Task.CompletedTask);
+        _contextFactoryMock.Reset();
+        _contextFactoryMock.Setup(x => x.CreateAsync(It.IsAny<Message>(), default))
+            .Returns(Task.FromResult(new Mock<IHandlerContext<Message>>().Object));
     }
 
     [Test]

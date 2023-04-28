@@ -49,12 +49,12 @@ public class BotDispatcher : IBotDispatcher
     {//TODO: normal Context
         var client = (ITelegramBotClient)_serviceProvider.GetService(typeof(ITelegramBotClient))!;
               
-        if(data is Message message)
-        {
-            var contextFactory = (IChatContextFactory)_serviceProvider.GetService(typeof(IChatContextFactory))!;
-            var chatContext = await contextFactory.GetContextAsync(data, cancellationToken);
-            return (IHandlerContext<TData>)new MessageContext(message, client, chatContext);
-        }
+        //if(data is Message message)
+        //{
+        //    var contextFactory = (IChatContextFactory)_serviceProvider.GetService(typeof(IChatContextFactory))!;
+        //    var chatContext = await contextFactory.GetContextAsync(data, cancellationToken);
+        //    return (IHandlerContext<TData>)new MessageContext(message, client, chatContext);
+        //}
         //else if(data is CallbackQuery query)
         //{
         //    var serializer = (ICallbackSerializer)_serviceProvider.GetService(typeof(ICallbackSerializer))!;

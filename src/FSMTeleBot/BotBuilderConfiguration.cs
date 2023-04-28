@@ -20,7 +20,7 @@ public class BotBuilderConfiguration
 
     internal BotBuilderConfiguration()
     {
-
+        Assemblies.Add(GetType().Assembly);
     }
         //TODO: Move to extensions class
     public BotBuilderConfiguration AddAssemblyFrom<T>() 

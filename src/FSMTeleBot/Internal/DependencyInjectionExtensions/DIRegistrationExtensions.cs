@@ -48,7 +48,7 @@ namespace FSMTeleBot.Internal.DependencyInjectionExtensions
                 .GetAllImplementationOfGenericInterface(ass));
             foreach(var factory in factories)
             {
-                var generic = factory.GetGenericArguments()[0];
+                var generic = factory.GetGenericFromImplementedInterface(typeof(IHandlerContextFactory<>));
                 services.AddTransient(
                     typeof(IHandlerContextFactory<>).MakeGenericType(generic), factory);
             }

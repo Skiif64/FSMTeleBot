@@ -1,4 +1,5 @@
 ﻿using FSMTeleBot.Internal.Dispatcher;
+using Swan.Logging;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
@@ -9,14 +10,16 @@ namespace FSMTeleBot.Services;
 internal class DefaultUpdateHandler : IUpdateHandler
 {
     private readonly IBotDispatcher _mediator;
+    
 
     public DefaultUpdateHandler(IBotDispatcher mediator)
     {
-        _mediator = mediator;
+        _mediator = mediator;        
     }
 
     public Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
     {
+        Console.WriteLine(exception.ToString());
         return Task.CompletedTask;
     }
 

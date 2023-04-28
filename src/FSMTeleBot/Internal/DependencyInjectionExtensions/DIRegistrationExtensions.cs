@@ -14,8 +14,8 @@ namespace FSMTeleBot.Internal.DependencyInjectionExtensions
             var handlerTypes = new[]
             {
                 typeof(IHandler<Message, IHandlerContext<Message>>),
-                typeof(IHandler<Message, HandlerContext<Message>>),
-                typeof(IHandler<Message, MessageContext>),                
+                //typeof(IHandler<Message, HandlerContext<Message>>),
+                //typeof(IHandler<Message, MessageContext>),                
             };
             foreach (var handlerType in handlerTypes)
             {

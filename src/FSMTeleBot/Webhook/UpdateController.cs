@@ -14,11 +14,7 @@ public class UpdateController : WebApiController
         
     }
 
-    private static async Task<Update> DeserializeUpdateAsync(IHttpContext context)
-    {
-        var serializer = JsonSerializer.CreateDefault();
-        using var stringReader = new StringReader(await context.GetRequestBodyAsStringAsync());
-        using var jsonReader = new JsonTextReader(stringReader);
-        return serializer.Deserialize<Update>(jsonReader);
-    }
+    private static async Task<Update> DeserializeUpdateAsync(IHttpContext context) 
+        => JsonConvert.DeserializeObject<Update>(await context.GetRequestBodyAsStringAsync());        
+    
 }

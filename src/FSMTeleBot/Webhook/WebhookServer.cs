@@ -16,8 +16,7 @@ public class WebhookServer
     public static WebhookServer Create(WebhookOptions options)
     {
         var server = new WebServer(opt => opt
-        .WithUrlPrefix(options.Url)
-
+        .WithUrlPrefix(options.Url)        
         .WithMode(HttpListenerMode.EmbedIO))
             .WithWebApi("/api", cfg => cfg
             .WithController<UpdateController>());

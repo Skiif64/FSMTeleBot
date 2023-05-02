@@ -1,8 +1,9 @@
 ﻿
 namespace FSMTeleBot.Handlers.Abstractions;
 
-public interface IHandler<TData, TContext>
+public interface IHandler<TData, out TContext>
     where TContext : IHandlerContext<TData>
 {
-    Task HandleAsync(TContext context, CancellationToken cancellationToken = default);
+    TContext Context { get; }
+    Task HandleAsync(CancellationToken cancellationToken = default);
 }

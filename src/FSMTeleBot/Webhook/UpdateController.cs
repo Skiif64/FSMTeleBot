@@ -10,7 +10,13 @@ public class UpdateController : WebApiController
     [Route(HttpVerbs.Post, "update")]
     public async Task UpdateAsync()
     {       
-        var update = await HttpContext.GetRequestDataAsync<Update>(DeserializeUpdateAsync);    
+        var update = await HttpContext.GetRequestDataAsync<Update>(DeserializeUpdateAsync);  
+        if(update is null)
+        {
+            HttpContext.Response.StatusCode = 400;
+
+            return;
+        }
         
     }
 

@@ -6,21 +6,22 @@ using Telegram.Bot.Types;
 namespace FSMTeleBot.Webhook;
 public class WebhookServer
 {
-    private readonly WebServer _server;
+    private readonly IServiceProvider _serviceProvider;
 
-    public WebhookServer(WebServer server)
+    public WebhookServer(IServiceProvider serviceProvider)
     {
-        _server = server;
+        _serviceProvider = serviceProvider;
     }
 
-    public static WebhookServer Create(WebhookOptions options)
+    public WebServer Create(WebhookOptions options)
     {
         var server = new WebServer(opt => opt
         .WithUrlPrefix(options.Url)        
         .WithMode(HttpListenerMode.EmbedIO))
             .WithWebApi("/api", cfg => cfg
-            .WithController<UpdateController>());
+            .WithController(() => (UpdateController)_serviceProvider
+            .GetService(typeof(UpdateController))!));
 
-        return new WebhookServer(server);
+        return server;
     }
 }

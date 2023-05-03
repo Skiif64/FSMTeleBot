@@ -10,8 +10,8 @@ namespace FSMTeleBot.Tests.DITests;
 public class RegistrationTests
 {
     public class TestMessageHandler : IHandler<Message, IHandlerContext<Message>>
-    {
-        public Task HandleAsync(IHandlerContext<Message> data, CancellationToken cancellationToken = default)
+    {    
+        public Task HandleAsync(object context, CancellationToken cancellationToken = default)
         {
             return Task.CompletedTask;
         }
@@ -19,7 +19,7 @@ public class RegistrationTests
 
     public class TestMessageHandler2 : IHandler<Message, IHandlerContext<Message>>
     {
-        public Task HandleAsync(IHandlerContext<Message> data, CancellationToken cancellationToken = default)
+        public Task HandleAsync(object context, CancellationToken cancellationToken = default)
         {
             return Task.CompletedTask;
         }

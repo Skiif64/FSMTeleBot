@@ -4,11 +4,11 @@ using Newtonsoft.Json;
 using Telegram.Bot.Types;
 
 namespace FSMTeleBot.Webhook;
-public class WebhookServer
+public class WebhookServerFactory //TODO: add interface
 {
     private readonly IServiceProvider _serviceProvider;
 
-    public WebhookServer(IServiceProvider serviceProvider)
+    public WebhookServerFactory(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
     }

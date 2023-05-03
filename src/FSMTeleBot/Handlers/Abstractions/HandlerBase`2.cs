@@ -6,7 +6,7 @@ public abstract class HandlerBase<TData, TContext> : IHandler<TData, TContext>
     {
         if(context is not TContext ctx)
         {
-            throw new ArgumentException(nameof(context));
+            throw new ArgumentException($"{nameof(context)} is not {nameof(TContext)}");
         }
         return HandleAsync(ctx, cancellationToken);
     }

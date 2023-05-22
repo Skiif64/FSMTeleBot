@@ -1,4 +1,5 @@
 ﻿using FSMTeleBot.Abstractions;
+using FSMTeleBot.Webhook;
 using Microsoft.Extensions.DependencyInjection;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
@@ -35,7 +36,11 @@ public class TelegramBot : ITelegramBot
                 _options.ReceiverOptions.ThrowPendingUpdates,
                 cancellationToken)
                 .ConfigureAwait(false);
-            //TODO: Start a server            
+
+            var serverFactory = (WebhookServerFactory)_serviceProvider.GetService(typeof(WebhookServerFactory))!;
+            using var server = serverFactory.Create(_options.WebhookOptions);
+            await server.RunAsync(cancellationToken)
+                .ConfigureAwait(false);
         }
         else
         {

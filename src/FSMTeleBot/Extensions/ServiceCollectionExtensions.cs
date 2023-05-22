@@ -2,8 +2,10 @@
 using FSMTeleBot.Internal;
 using FSMTeleBot.Internal.DependencyInjectionExtensions;
 using FSMTeleBot.Internal.Dispatcher;
+using FSMTeleBot.Services;
 using FSMTeleBot.States;
 using FSMTeleBot.States.Abstractions;
+using FSMTeleBot.Webhook;
 using Microsoft.Extensions.DependencyInjection;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
@@ -42,13 +44,15 @@ public static class ServiceCollectionExtensions
     {
         services.AddTransient(typeof(ITelegramBotClient), sp => new TelegramBotClient(
             sp.GetRequiredService<TelegramBotOptions>()
-            .BotOptions.Token)); //TODO: implement custom telegram client, maybe a factory
+            .BotOptions)); //TODO: implement custom telegram client, maybe a factory
         services.AddScoped(typeof(IChatStateStorage), configuration.StateStorageImplementationType);
         services.AddScoped(typeof(IChatMemberService), configuration.MemberServiceImplementationType);
         services.AddSingleton(typeof(IUpdateHandler), configuration.UpdateHandlerImplementationType);
         services.AddSingleton<IBotDispatcher, BotDispatcher>(); //TODO: Singleton???
-        services.AddScoped<IChatContextFactory, ChatContextFactory>();                                                            
+        services.AddScoped<IChatContextFactory, ChatContextFactory>();
+        services.AddScoped<InternalUpdateHandler>();//TODO: remove?
         services.AddHostedService<TelegramBot>();
+        services.AddTransient<WebhookServerFactory>();
         return services;
     }
 }

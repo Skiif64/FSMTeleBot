@@ -16,11 +16,10 @@ public class WebhookServerFactory //TODO: add interface
     public WebServer Create(WebhookOptions options)
     {
         var server = new WebServer(opt => opt
-        .WithUrlPrefix(options.Url)        
+        .WithUrlPrefix("http://localhost:8080/")
         .WithMode(HttpListenerMode.EmbedIO))
-            .WithWebApi("/api", cfg => cfg
-            .WithController(() => (UpdateController)_serviceProvider
-            .GetService(typeof(UpdateController))!));
+            .WithWebApi("/api", cfg => cfg            
+            .WithController<UpdateController>());
 
         return server;
     }

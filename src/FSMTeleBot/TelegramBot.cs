@@ -28,11 +28,6 @@ public class TelegramBot : ITelegramBot
             if (_options.WebhookOptions is null)
                 throw new ArgumentNullException(nameof(_options.WebhookOptions));
 
-            var serverFactory = (WebhookServerFactory)_serviceProvider.GetService(typeof(WebhookServerFactory))!;
-            using var server = serverFactory.Create(_options.WebhookOptions);
-            await server.RunAsync(cancellationToken)
-                .ConfigureAwait(false);
-
             await client.SetWebhookAsync(_options.WebhookOptions.Url,
                 _options.WebhookOptions.Certificate,
                 _options.WebhookOptions.IpAdress,
@@ -40,6 +35,11 @@ public class TelegramBot : ITelegramBot
                 _options.ReceiverOptions.AllowedUpdates,
                 _options.ReceiverOptions.ThrowPendingUpdates,
                 cancellationToken)
+                .ConfigureAwait(false);
+
+            var serverFactory = (WebhookServerFactory)_serviceProvider.GetService(typeof(WebhookServerFactory))!;
+            using var server = serverFactory.Create(_options.WebhookOptions);
+            await server.RunAsync(cancellationToken)
                 .ConfigureAwait(false);
         }
         else

@@ -362,3 +362,5 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /test/FSMTeleBot.CMD/Program.cs
+/src/FSMTeleBot/nuget.config
+/nuget.config

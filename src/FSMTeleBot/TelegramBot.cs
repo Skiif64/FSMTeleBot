@@ -7,7 +7,7 @@ using Telegram.Bot.Polling;
 namespace FSMTeleBot;
 public class TelegramBot : ITelegramBot
 {
-    private readonly TelegramBotOptions _options;
+    private readonly TelegramBotOptions _options;    
     private readonly IUpdateHandler _updateHandler;
     private readonly IServiceProvider _serviceProvider;
    
@@ -22,7 +22,7 @@ public class TelegramBot : ITelegramBot
     public async Task StartAsync(CancellationToken cancellationToken = default)
     {
         await using var scope = _serviceProvider.CreateAsyncScope();
-        var client = (ITelegramBotClient)scope.ServiceProvider.GetService(typeof(ITelegramBotClient))!;
+        var client = scope.ServiceProvider.GetRequiredService<ITelegramBotClient>();
         if (_options.UseWebhook)
         {
             if (_options.WebhookOptions is null)
@@ -37,7 +37,7 @@ public class TelegramBot : ITelegramBot
                 cancellationToken)
                 .ConfigureAwait(false);
 
-            var serverFactory = (WebhookServerFactory)_serviceProvider.GetService(typeof(WebhookServerFactory))!;
+            var serverFactory = scope.ServiceProvider.GetRequiredService<WebhookServerFactory>();
             using var server = serverFactory.Create(_options.WebhookOptions);
             await server.RunAsync(cancellationToken)
                 .ConfigureAwait(false);
@@ -53,7 +53,7 @@ public class TelegramBot : ITelegramBot
         if (_options.UseWebhook)
         {
             await using var scope = _serviceProvider.CreateAsyncScope();
-            var client = (ITelegramBotClient)scope.ServiceProvider.GetService(typeof(ITelegramBotClient))!;
+            var client = scope.ServiceProvider.GetRequiredService<ITelegramBotClient>();
             await client.DeleteWebhookAsync(_options.ReceiverOptions.ThrowPendingUpdates,
                 cancellationToken)
                 .ConfigureAwait(false);

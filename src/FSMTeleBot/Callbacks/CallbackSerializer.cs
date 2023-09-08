@@ -22,30 +22,10 @@ internal class CallbackSerializer : ICallbackSerializer
         var header = args[0];
         var data = args[1..];
         return new CallbackInfo(header, data);
-    }
-
-    public T DeserializeAs<T>(string callbackData) where T : ICallbackQuery, new()
-    {
-        var info = Deserialize(callbackData);
-        var type = typeof(T);
-        var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-
-        var query = Activator.CreateInstance<T>();
-        
-        var dataProperties = properties[1..];
-
-        int i = 0;
-        foreach (var property in dataProperties)
-        {//TODO: add value converters
-            property.SetValue(query, info.Data[i]);
-            i++;
-        }
-
-        return query!;
-    }       
+    }      
    
 
-    public string Serialize<T>(T data) where T : ICallbackQuery, new()
+    public string Serialize<T>(T data) where T : ICallbackQuery
     {
         var type = typeof(T);
         var builder = new StringBuilder(64);

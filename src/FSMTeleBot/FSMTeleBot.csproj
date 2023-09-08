@@ -4,11 +4,28 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>FSMTelebot</Title>
+    <Authors>Skiif64</Authors>
+    <Description>Test build. Please don't use it</Description>
+    <Version>0.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="FSM\**" />
+    <EmbeddedResource Remove="FSM\**" />
+    <None Remove="FSM\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="EmbedIO" Version="3.5.2" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
     <PackageReference Include="Telegram.Bot" Version="18.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Callbacks\Converters\" />
+    <Folder Include="Middlewares\" />
   </ItemGroup>
 
 </Project>

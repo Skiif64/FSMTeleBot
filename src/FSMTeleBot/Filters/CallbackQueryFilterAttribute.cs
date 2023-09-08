@@ -1,4 +1,5 @@
 ﻿using FSMTeleBot.Callbacks;
+using Microsoft.Extensions.DependencyInjection;
 using Telegram.Bot.Types;
 
 namespace FSMTeleBot.Filters;
@@ -18,10 +19,10 @@ public class CallbackQueryFilterAttribute : FilterAttribute
     {
         if(QueryType is not null)
         {
-            var serializer = (ICallbackSerializer)provider
-                .GetService(typeof(ICallbackSerializer))!;
+            var serializer = provider.GetRequiredService<ICallbackSerializer>();
             if (query.Data is null)
                 return false;
+
             if (!serializer.CanDeserializeTo(query.Data, QueryType))
                 return false;
         }

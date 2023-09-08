@@ -57,7 +57,7 @@ internal class CallbackSerializerTests
     }
 
     [Test]
-    public void WhenCanDesirializeToTestCallbackQuery_TestQueryString_ThenShouldReturnTrue()
+    public void WhenCanDeserializeToTestCallbackQuery_TestQueryString_ThenShouldReturnTrue()
     {
         var queryString = "Test;1;2";
         var type = typeof(TestCallbackQuery);
@@ -66,7 +66,7 @@ internal class CallbackSerializerTests
     }
 
     [Test]
-    public void WhenCanDesirializeToTestCallbackQuery_UnknownQueryString_ThenShouldReturnFalse()
+    public void WhenCanDeserializeToTestCallbackQuery_UnknownQueryString_ThenShouldReturnFalse()
     {
         var queryString = "Unknown;1;2";
         var type = typeof(TestCallbackQuery);
